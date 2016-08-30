@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
-import { observer } from 'mobx-react';
 
-const Form = observer(({
+const Form = ({
   fields: { email, password },
   errors,
   onSubmit,
@@ -25,7 +24,7 @@ const Form = observer(({
 
     </form>
   );
-});
+};
 
 Form.propTypes = {
   fields: PropTypes.shape({

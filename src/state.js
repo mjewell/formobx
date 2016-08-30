@@ -5,7 +5,7 @@ import createErrorMessages from './createErrorMessages';
 
 export default class Store {
   @observable fields = {};
-  @observable errors = {}
+  @observable errors = {};
   @observable submitting = false;
 
   constructor(fields) {
