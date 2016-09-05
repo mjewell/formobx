@@ -14,13 +14,15 @@ export default class Store {
     };
   }
 
-  @action
-  updateValue(val) {
+  @action updateValue(val) {
     this.value = val;
   }
 
-  @action
-  updateErrors(errors) {
-    this.errors = errors;
+  @action clearErrors() {
+    this.errors.clear();
+  }
+
+  @action updateErrors(errors) {
+    this.errors.replace(errors);
   }
 }

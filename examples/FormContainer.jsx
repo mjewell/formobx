@@ -1,5 +1,5 @@
 import Promise from 'bluebird';
-import formobx from '../src/formobx';
+import { formobx } from '../lib';
 import Form from './Form';
 
 export default formobx(Form, {

@@ -35,17 +35,21 @@ export default class Store {
   }
 
   @action clearErrors() {
-    this.fields.values().forEach(field => field.updateErrors([]));
-    this.updateErrors([]);
+    this.fields.values().forEach(field => field.clearErrors());
+    this.errors.clear();
   }
 
   @action updateErrors(errors) {
+    this.errors.replace(errors);
+  }
+
+  @action updateAllErrors(errors) {
     _.keys(errors).forEach(key => {
       if (this.fields.has(key)) {
-        this.fields.get(key).updateErrors(errors[key]);
+        this.fields.get(key).updateErrors(errors[key] || []);
       }
     });
 
-    this.errors = errors._base;
+    this.updateErrors(errors._base || []);
   }
 }

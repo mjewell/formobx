@@ -1,8 +1,10 @@
 {
   "name": "formobx",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A library for removing a lot of boilerplate from forms with Mobx.",
+  "main": "lib/index.js",
   "scripts": {
+    "compile": "babel -d lib/ src/",
     "example": "node server.js",
     "lint": "eslint src"
   },
@@ -23,6 +25,7 @@
     "url": "https://github.com/mjewell/formobx/issues"
   },
   "devDependencies": {
+    "babel-cli": "^6.14.0",
     "babel-core": "^6.9.1",
     "babel-eslint": "^6.1.0",
     "babel-loader": "^6.2.4",

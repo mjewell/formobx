@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { observer } from 'mobx-react';
 import _ from 'lodash';
-import Field from '../src/components/field/component';
+import { Field } from '../lib';
 import MyField from './Field';
 import Error from './Error';
 

@@ -7,12 +7,12 @@ function wrapOnSubmit(store, callback) {
     store.updateSubmitting(true);
     store.clearErrors();
     Promise.resolve(callback(store.fieldValues))
-      .catch(result => store.updateErrors(result))
+      .catch(result => store.updateAllErrors(result))
       .then(() => store.updateSubmitting(false));
   };
 }
 
-export default function createForm(component, options) {
+export default function formobx(component, options) {
   class Form extends Component {
     constructor(props) {
       super(props);
