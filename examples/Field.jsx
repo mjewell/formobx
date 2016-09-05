@@ -7,8 +7,7 @@ const Field = observer(({ field, type, name }) => (
   <div>
     <label>{name}: </label>
     <input
-      onChange={e => field.updateValue(e.target.value)}
-      defaultValue={field.value}
+      {...field.asProps}
       type={type}
     />
     {_.map(field.errors, error => <Error msg={error} />)}
