@@ -7,13 +7,18 @@ export default class State {
   @observable errors = [];
 
   @computed
+  get fieldsJS() {
+    return this.fields.toJS();
+  }
+
+  @computed
   get fieldValues() {
-    return _.mapValues(this.fields.toJS(), f => f.value);
+    return _.mapValues(this.fieldsJS, f => f.value);
   }
 
   @computed
   get fieldErrors() {
-    return _.mapValues(this.fields.toJS(), f => f.errors);
+    return _.mapValues(this.fieldsJS, f => f.errors);
   }
 
   @action
