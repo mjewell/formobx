@@ -1,32 +1,47 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
 import State from './state';
-import Actions from './actions';
 
-export default function (Form, fields, onSubmit) {
-  return @observer class extends Component {
-    constructor() {
-      super();
-      this.state = new State(fields);
-      this.actions = new Actions(this.state);
-      this.partiallyAppliedOnSubmit = e => {
-        this.actions.onSubmit(e, onSubmit);
-      };
-      this.updateField = (fieldName, val) => {
-        this.actions.updateField(fieldName, val);
-      };
+function wrapOnSubmit(state, callback) {
+  return function onSubmit(e) {
+    e.preventDefault();
+    state.updateSubmitting(true);
+    state.clearErrors();
+    Promise.resolve(callback(state.fieldValues))
+      .catch(result => state.updateErrors(result))
+      .then(() => state.updateSubmitting(false));
+  };
+}
+
+export default function createForm(component, options) {
+  class Form extends Component {
+    constructor(props) {
+      super(props);
+      this.state = new State();
+      this.component = component;
+
+      if (options.onSubmit) {
+        this.onSubmit = wrapOnSubmit(this.state, options.onSubmit);
+      }
+    }
+
+    getChildContext() {
+      return { formState: this.state };
     }
 
     render() {
       return (
-        <Form
-          fields={this.state.fieldProps}
-          errors={this.state.errorMessages}
-          onSubmit={this.partiallyAppliedOnSubmit}
-          submitting={this.state.submitting}
-          updateField={this.updateField}
+        <this.component
+          {...this.props}
+          form={this.state}
+          onSubmit={this.onSubmit}
         />
       );
     }
+  }
+
+  Form.childContextTypes = {
+    formState: React.PropTypes.object
   };
+
+  return Form;
 }

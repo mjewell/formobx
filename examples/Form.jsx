@@ -1,39 +1,27 @@
 import React, { PropTypes } from 'react';
+import { observer } from 'mobx-react';
+import _ from 'lodash';
+import Field from '../src/components/field/component';
+import MyField from './Field';
+import Error from './Error';
 
-const Form = ({
-  fields: { email, password },
-  errors,
-  onSubmit,
-  submitting
-}) => {
+const Form = observer(({ form, onSubmit }) => {
   return (
     <form onSubmit={onSubmit}>
-
-      <label>Email: </label>
-      <input {...email} />
-      <div>{errors.email}</div>
-
-      <label>Password: </label>
-      <input type="password" {...password} />
-      <div>{errors.password}</div>
-
-      <button type="submit" disabled={submitting}>
+      <Field name="email" type="text" component={MyField} />
+      <Field name="password" type="password" component={MyField} />
+      <p>Form JSON: {JSON.stringify(form.fieldValues, null, 2)}</p>
+      <button type="submit" disabled={form.submitting}>
         Log In
       </button>
-      <div>{errors._base}</div>
-
+      {_.map(form.errors, error => <Error msg={error} />)}
     </form>
   );
-};
+});
 
 Form.propTypes = {
-  fields: PropTypes.shape({
-    email: PropTypes.object.isRequired,
-    password: PropTypes.object.isRequired
-  }).isRequired,
-  errors: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired
+  form: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func
 };
 
 export default Form;
