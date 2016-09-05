@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import _ from 'lodash';
 import Field from '../src/components/field/component';
 import MyField from './Field';
+import Error from './Error';
 
 const Form = observer(({ form, onSubmit }) => {
   return (
@@ -13,6 +14,7 @@ const Form = observer(({ form, onSubmit }) => {
       <button type="submit" disabled={form.submitting}>
         Log In
       </button>
+      {_.map(form.errors, error => <Error msg={error} />)}
     </form>
   );
 });

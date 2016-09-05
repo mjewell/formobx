@@ -6,6 +6,7 @@ function wrapOnSubmit(state, callback) {
   return function onSubmit(e) {
     e.preventDefault();
     state.updateSubmitting(true);
+    state.clearErrors();
     Promise.resolve(callback(state.fieldValues))
       .catch(result => state.updateErrors(result))
       .then(() => state.updateSubmitting(false));

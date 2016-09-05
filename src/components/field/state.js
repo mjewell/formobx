@@ -8,4 +8,9 @@ export default class State {
   updateValue(val) {
     this.value = val;
   }
+
+  @action
+  updateErrors(errors) {
+    this.errors = errors;
+  }
 }

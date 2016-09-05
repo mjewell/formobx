@@ -9,10 +9,16 @@ const App = () => {
     <div>
       <Form
         component={MyForm}
-        onSubmit={fields => {
-          console.log(fields);
-          return Promise.delay(1000);
-        }}
+        onSubmit={() => Promise.delay(1000).then(() => {
+          throw {
+            email: ['is wrong somehow'],
+            password: [
+              'is not strong enough',
+              'and something else'
+            ],
+            _base: ['the form has some issues']
+          };
+        })}
       />
       <DevTools />
     </div>

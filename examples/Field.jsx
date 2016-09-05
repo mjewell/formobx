@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import { observer } from 'mobx-react';
+import _ from 'lodash';
+import Error from './Error';
 
 const Field = observer(({ field, type, name }) => (
   <div>
@@ -9,6 +11,7 @@ const Field = observer(({ field, type, name }) => (
       defaultValue={field.value}
       type={type}
     />
+    {_.map(field.errors, error => <Error msg={error} />)}
     <p>Preview: {field.value}</p>
   </div>
 ));

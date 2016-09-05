@@ -3,12 +3,17 @@ import _ from 'lodash';
 
 export default class State {
   @observable fields = asMap({});
-  @observable errors = asMap({});
   @observable submitting = false;
+  @observable errors = [];
 
   @computed
   get fieldValues() {
     return _.mapValues(this.fields.toJS(), f => f.value);
+  }
+
+  @computed
+  get fieldErrors() {
+    return _.mapValues(this.fields.toJS(), f => f.errors);
   }
 
   @action
@@ -22,5 +27,20 @@ export default class State {
 
   @action updateSubmitting(submitting) {
     this.submitting = submitting;
+  }
+
+  @action clearErrors() {
+    this.fields.values().forEach(field => field.updateErrors([]));
+    this.updateErrors([]);
+  }
+
+  @action updateErrors(errors) {
+    _.keys(errors).forEach(key => {
+      if (this.fields.has(key)) {
+        this.fields.get(key).updateErrors(errors[key]);
+      }
+    });
+
+    this.errors = errors._base;
   }
 }
