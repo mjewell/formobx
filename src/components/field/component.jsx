@@ -1,30 +1,30 @@
 import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
-import State from './state';
+import Store from './store';
 
 class Field extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = new State();
+    this.store = new Store();
     this.component = props.component;
   }
 
   componentDidMount() {
-    this.context.formState.addField(this.props.name, this.state);
+    this.context.formStore.addField(this.props.name, this.store);
   }
 
   render() {
     return (
       <this.component
         {..._.omit(this.props, 'component')}
-        field={this.state}
+        field={this.store}
       />
     );
   }
 }
 
 Field.contextTypes = {
-  formState: PropTypes.object.isRequired
+  formStore: PropTypes.object.isRequired
 };
 
 Field.propTypes = {

@@ -1,7 +1,7 @@
 import { observable, computed, action, asMap } from 'mobx';
 import _ from 'lodash';
 
-export default class State {
+export default class Store {
   @observable fields = asMap({});
   @observable submitting = false;
   @observable errors = [];

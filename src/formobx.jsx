@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import State from './state';
+import Store from './store';
 
-function wrapOnSubmit(state, callback) {
+function wrapOnSubmit(store, callback) {
   return function onSubmit(e) {
     e.preventDefault();
-    state.updateSubmitting(true);
-    state.clearErrors();
-    Promise.resolve(callback(state.fieldValues))
-      .catch(result => state.updateErrors(result))
-      .then(() => state.updateSubmitting(false));
+    store.updateSubmitting(true);
+    store.clearErrors();
+    Promise.resolve(callback(store.fieldValues))
+      .catch(result => store.updateErrors(result))
+      .then(() => store.updateSubmitting(false));
   };
 }
 
@@ -16,23 +16,23 @@ export default function createForm(component, options) {
   class Form extends Component {
     constructor(props) {
       super(props);
-      this.state = new State();
+      this.store = new Store();
       this.component = component;
 
       if (options.onSubmit) {
-        this.onSubmit = wrapOnSubmit(this.state, options.onSubmit);
+        this.onSubmit = wrapOnSubmit(this.store, options.onSubmit);
       }
     }
 
     getChildContext() {
-      return { formState: this.state };
+      return { formStore: this.store };
     }
 
     render() {
       return (
         <this.component
           {...this.props}
-          form={this.state}
+          form={this.store}
           onSubmit={this.onSubmit}
         />
       );
@@ -40,7 +40,7 @@ export default function createForm(component, options) {
   }
 
   Form.childContextTypes = {
-    formState: React.PropTypes.object
+    formStore: React.PropTypes.object
   };
 
   return Form;

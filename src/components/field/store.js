@@ -1,6 +1,6 @@
 import { observable, computed, action } from 'mobx';
 
-export default class State {
+export default class Store {
   @observable value = '';
   @observable errors = [];
 
