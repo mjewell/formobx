@@ -16,7 +16,7 @@ export default function formobx(component, options) {
   class Form extends Component {
     constructor(props) {
       super(props);
-      this.store = new Store();
+      this.store = new Store(options);
       this.component = component;
 
       if (options.onSubmit) {

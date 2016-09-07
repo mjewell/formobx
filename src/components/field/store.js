@@ -7,7 +7,7 @@ export default class Store {
   @computed
   get asProps() {
     return {
-      defaultValue: this.value,
+      value: this.value,
       onChange: e => {
         this.updateValue(e.target.value);
       }

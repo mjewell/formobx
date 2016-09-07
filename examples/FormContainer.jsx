@@ -12,5 +12,8 @@ export default formobx(Form, {
       ],
       _base: ['the form has some issues']
     };
-  })
+  }),
+  initialValues: {
+    email: 'my@email.com'
+  }
 });

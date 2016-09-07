@@ -6,6 +6,10 @@ export default class Store {
   @observable submitting = false;
   @observable errors = [];
 
+  constructor(options) {
+    this.initialValues = options.initialValues || {};
+  }
+
   @computed
   get fieldsJS() {
     return this.fields.toJS();
@@ -28,6 +32,8 @@ export default class Store {
     }
 
     this.fields.set(name, field);
+
+    field.updateValue(this.initialValues[name] || '');
   }
 
   @action updateSubmitting(submitting) {
