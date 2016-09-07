@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
 import { observer } from 'mobx-react';
-import _ from 'lodash';
+import map from 'lodash/fp/map';
 import { Field } from '../lib';
 import MyField from './Field';
 import Error from './Error';
+
+const mapErrors = map(error => <Error msg={error} />);
 
 const Form = observer(({ form, onSubmit }) => {
   return (
@@ -14,7 +16,7 @@ const Form = observer(({ form, onSubmit }) => {
       <button type="submit" disabled={form.submitting}>
         Log In
       </button>
-      {_.map(form.errors, error => <Error msg={error} />)}
+      {mapErrors(form.errors)}
     </form>
   );
 });

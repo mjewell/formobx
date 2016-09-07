@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import _ from 'lodash';
+import omit from 'lodash/fp/omit';
 import Store from './store';
+
+const exceptComponent = omit('component');
 
 class Field extends Component {
   constructor(props, context) {
@@ -16,7 +18,7 @@ class Field extends Component {
   render() {
     return (
       <this.component
-        {..._.omit(this.props, 'component')}
+        {...exceptComponent(this.props)}
         field={this.store}
       />
     );

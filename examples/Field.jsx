@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react';
 import { observer } from 'mobx-react';
-import _ from 'lodash';
+import map from 'lodash/fp/map';
 import Error from './Error';
+
+const mapErrors = map(error => <Error msg={error} />);
 
 const Field = observer(({ field, type, name }) => (
   <div>
@@ -10,7 +12,7 @@ const Field = observer(({ field, type, name }) => (
       {...field.asProps}
       type={type}
     />
-    {_.map(field.errors, error => <Error msg={error} />)}
+    {mapErrors(field.errors)}
     <p>Preview: {field.value}</p>
   </div>
 ));

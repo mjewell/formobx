@@ -1,5 +1,9 @@
 import { observable, computed, action, asMap } from 'mobx';
-import _ from 'lodash';
+import mapValues from 'lodash/fp/mapValues';
+import keys from 'lodash/keys';
+
+const getValues = mapValues(f => f.value);
+const getErrors = mapValues(f => f.errors);
 
 export default class Store {
   @observable fields = asMap({});
@@ -17,12 +21,12 @@ export default class Store {
 
   @computed
   get fieldValues() {
-    return _.mapValues(this.fieldsJS, f => f.value);
+    return getValues(this.fieldsJS);
   }
 
   @computed
   get fieldErrors() {
-    return _.mapValues(this.fieldsJS, f => f.errors);
+    return getErrors(this.fieldsJS);
   }
 
   @action
@@ -50,7 +54,7 @@ export default class Store {
   }
 
   @action updateAllErrors(errors) {
-    _.keys(errors).forEach(key => {
+    keys(errors).forEach(key => {
       if (this.fields.has(key)) {
         this.fields.get(key).updateErrors(errors[key] || []);
       }
