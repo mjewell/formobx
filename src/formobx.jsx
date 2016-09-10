@@ -12,7 +12,7 @@ function wrapOnSubmit(store, callback) {
   };
 }
 
-export default function formobx(component, options) {
+export default function formobx(component, options = {}) {
   class Form extends Component {
     constructor(props) {
       super(props);

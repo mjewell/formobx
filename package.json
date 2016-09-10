@@ -4,9 +4,10 @@
   "description": "A library for removing a lot of boilerplate from forms with Mobx.",
   "main": "lib/index.js",
   "scripts": {
-    "compile": "babel -d lib/ src/",
-    "example": "node server.js",
-    "lint": "eslint src"
+    "build": "babel -d lib/ src/",
+    "start": "npm run build && node server.js",
+    "lint": "eslint src",
+    "test": "ava --verbose"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "url": "https://github.com/mjewell/formobx/issues"
   },
   "devDependencies": {
+    "ava": "^0.16.0",
     "babel-cli": "^6.14.0",
     "babel-core": "^6.9.1",
     "babel-eslint": "^6.1.0",
@@ -34,21 +36,32 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-1": "^6.5.0",
     "bluebird": "^3.4.3",
+    "enzyme": "^2.4.1",
     "eslint": "^2.13.1",
     "eslint-config-airbnb": "^8.0.0",
     "eslint-plugin-import": "^1.6.0",
     "eslint-plugin-jsx-a11y": "^1.0.3",
     "eslint-plugin-react": "^5.1.1",
+    "jsdom": "^9.5.0",
+    "mobx-react": "^3.3.1",
     "mobx-react-devtools": "^4.2.0",
+    "react-addons-test-utils": "^15.3.1",
+    "react-dom": "^15.3.1",
     "react-hot-loader": "^3.0.0-beta.2",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
     "lodash": "^4.15.0",
-    "mobx": "^2.2.2",
-    "mobx-react": "^3.3.1",
+    "mobx": "^2.5.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0"
+  },
+  "ava": {
+    "require": [
+      "babel-register",
+      "./test/helpers/setup-browser-env.js"
+    ],
+    "babel": "inherit"
   }
 }

@@ -9,6 +9,13 @@ class Field extends Component {
     super(props, context);
     this.store = new Store();
     this.component = props.component;
+
+    if (this.component === undefined) {
+      throw new Error('component prop is required');
+    }
+    if (context.formStore === undefined) {
+      throw new Error('formobx Fields must be used inside a formobx wrapped component');
+    }
   }
 
   componentDidMount() {

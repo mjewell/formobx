@@ -3,14 +3,14 @@ import mapValues from 'lodash/fp/mapValues';
 import keys from 'lodash/keys';
 
 const getValues = mapValues(f => f.value);
-const getErrors = mapValues(f => f.errors);
+const getErrors = mapValues(f => f.errors.slice());
 
 export default class Store {
   @observable fields = asMap({});
   @observable submitting = false;
   @observable errors = [];
 
-  constructor(options) {
+  constructor(options = {}) {
     this.initialValues = options.initialValues || {};
   }
 
@@ -35,9 +35,8 @@ export default class Store {
       throw new Error(`Field with name '${name}' already exists on this form`);
     }
 
-    this.fields.set(name, field);
-
     field.updateValue(this.initialValues[name] || '');
+    this.fields.set(name, field);
   }
 
   @action updateSubmitting(submitting) {
