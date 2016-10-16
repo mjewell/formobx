@@ -6,7 +6,7 @@
     "module": "commonjs",
     "noImplicitAny": true,
     "noLib": false,
-    "outDir": "build",
+    "outDir": "lib",
     "removeComments": true,
     "sourceMap": true,
     "strictNullChecks": true,
@@ -19,7 +19,7 @@
   },
   "exclude": [
     "node_modules",
-    "build",
+    "lib",
     "examples"
   ]
 }

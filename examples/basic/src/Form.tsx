@@ -1,4 +1,4 @@
-import { Field, FormStore } from '../../../build';
+import { Field, FormStore } from '../../../lib';
 import Error from './Error';
 import MyField from './Field';
 import { observer } from 'mobx-react';

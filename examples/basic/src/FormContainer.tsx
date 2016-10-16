@@ -1,4 +1,4 @@
-import { IForm, formobx } from '../../../build';
+import { IForm, formobx } from '../../../lib';
 import Form from './Form';
 import * as Promise from 'bluebird';
 
