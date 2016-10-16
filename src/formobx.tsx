@@ -9,7 +9,9 @@ export interface IWrappedOnSubmit {
   (e: React.FormEvent<any>): void;
 }
 
-export interface IFormobxProps {
+export interface IWrappedFormProps {
+  form: Store;
+  onSubmit: IWrappedOnSubmit;
   [prop: string]: any;
 }
 
@@ -17,7 +19,7 @@ export interface IFormobxOptions extends IStoreOptions {
   onSubmit: IOnSubmit;
 }
 
-export interface IForm extends React.ComponentClass<IFormobxProps> { }
+export interface IForm extends React.ComponentClass<IWrappedFormProps> { }
 
 function wrapOnSubmit(store: Store, callback: IOnSubmit) {
   return (e: React.FormEvent<any>) => {
@@ -31,7 +33,7 @@ function wrapOnSubmit(store: Store, callback: IOnSubmit) {
 }
 
 export function formobx(component: React.ComponentClass<any>, options: IFormobxOptions): IForm {
-  return class Form extends React.Component<IFormobxProps, {}> {
+  return class Form extends React.Component<IWrappedFormProps, {}> {
     public static childContextTypes = {
       formStore: React.PropTypes.object
     };
@@ -39,7 +41,7 @@ export function formobx(component: React.ComponentClass<any>, options: IFormobxO
     private component: React.ComponentClass<any>;
     private onSubmit: IWrappedOnSubmit;
 
-    constructor(props: IFormobxProps) {
+    constructor(props: IWrappedFormProps) {
       super(props);
       this.store = new Store(options);
       this.component = component;
