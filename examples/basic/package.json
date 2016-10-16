@@ -1,13 +1,11 @@
 {
-  "name": "formobx",
+  "name": "formobx-example-basic",
   "version": "0.1.0",
-  "description": "A library for removing a lot of boilerplate from forms with Mobx.",
-  "main": "lib/index.js",
+  "description": "An example usage of formobx",
+  "main": "src/index.js",
   "scripts": {
-    "build": "webpack --config webpack.dev.config",
-    "build:fast": "tsc",
-    "build:min": "webpack -p",
-    "lint": "tslint 'src/*.ts{,x}'; exit 0"
+    "lint": "tslint 'src/*.ts{,x}'; exit 0",
+    "start": "webpack-dashboard -- node server.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +24,7 @@
     "url": "https://github.com/mjewell/formobx/issues"
   },
   "devDependencies": {
+    "@types/bluebird": "^3.0.35",
     "@types/core-js": "^0.9.34",
     "@types/lodash": "^4.14.36",
     "@types/node": "^6.0.41",
@@ -39,12 +38,10 @@
     "html-webpack-plugin": "^2.22.0",
     "mobx-react-devtools": "^4.2.0",
     "node-sass": "^3.10.0",
-    "nodemon": "^1.10.2",
     "react-css-modules": "^3.7.10",
     "react-hot-loader": "^3.0.0-beta.5",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.2",
-    "source-map-loader": "^0.1.5",
     "style-loader": "^0.13.1",
     "stylelint": "^7.4.0",
     "stylelint-config-standard": "^13.0.2",

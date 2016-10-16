@@ -1,0 +1,31 @@
+{
+  "extends": [
+    "tslint:latest",
+    "tslint-react"
+  ],
+  "rulesDirectory": [
+    "node_modules/tslint-eslint-rules/dist/rules",
+    "node_modules/tslint-microsoft-contrib"
+  ],
+  "rules": {
+    "export-name": false,
+    "import-name": false,
+    "jsx-no-lambda": false,
+    "missing-jsdoc": false,
+    "no-constructor-vars": true,
+    "no-for-in-array": false,
+    "no-relative-imports": false,
+    "no-require-imports": false,
+    "no-unused-variable": [
+      true,
+      "react"
+    ],
+    "no-var-requires": false,
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "restrict-plus-operands": false,
+    "trailing-comma": false
+  }
+}

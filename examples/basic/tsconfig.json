@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "noLib": false,
+    "outDir": "build",
+    "removeComments": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "target": "es5",
+    "types": [
+      "node",
+      "core-js",
+      "lodash"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
