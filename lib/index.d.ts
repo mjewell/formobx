@@ -1,4 +1,3 @@
-import Field from './components/field/component';
-import formobx, { IForm } from './formobx';
-import FormStore from './store';
-export { Field, FormStore, IForm, formobx };
+export * from './components/field';
+export * from './formobx';
+export { Store as FormStore } from './store';

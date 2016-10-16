@@ -1,4 +1,4 @@
-import FieldStore from './components/field/store';
+import { FieldStore } from './components/field';
 import { IKeyValueMap, IObservableArray, ObservableMap } from 'mobx';
 export interface IStringMap {
     [s: string]: string;
@@ -6,7 +6,7 @@ export interface IStringMap {
 export interface IStoreOptions {
     initialValues?: IStringMap;
 }
-export default class Store {
+export declare class Store {
     submitting: boolean;
     fields: ObservableMap<FieldStore>;
     errors: IObservableArray<string>;

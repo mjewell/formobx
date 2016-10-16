@@ -1,4 +1,4 @@
-import FormStore from '../../store';
+import { Store as FormStore } from '../../store';
 import * as React from 'react';
 export interface IFieldProps {
     component: React.ComponentClass<any>;
@@ -8,7 +8,7 @@ export interface IFieldProps {
 export interface IFieldContext {
     formStore: FormStore;
 }
-declare class Field extends React.Component<IFieldProps, {}> {
+export declare class Field extends React.Component<IFieldProps, {}> {
     static contextTypes: {
         formStore: React.Validator<any>;
     };
@@ -19,4 +19,3 @@ declare class Field extends React.Component<IFieldProps, {}> {
     componentDidMount(): void;
     render(): JSX.Element;
 }
-export default Field;

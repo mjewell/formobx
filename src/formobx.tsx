@@ -1,4 +1,4 @@
-import Store, { IStoreOptions } from './store';
+import { IStoreOptions, Store } from './store';
 import * as React from 'react';
 
 export interface IOnSubmit {
@@ -30,7 +30,7 @@ function wrapOnSubmit(store: Store, callback: IOnSubmit) {
   };
 }
 
-export default function formobx(component: React.ComponentClass<any>, options: IFormobxOptions): IForm {
+export function formobx(component: React.ComponentClass<any>, options: IFormobxOptions): IForm {
   return class Form extends React.Component<IFormobxProps, {}> {
     public static childContextTypes = {
       formStore: React.PropTypes.object

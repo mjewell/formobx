@@ -1,4 +1,4 @@
-import FieldStore from './components/field/store';
+import { FieldStore } from './components/field';
 import * as keys from 'lodash/keys';
 import {
   IKeyValueMap,
@@ -22,7 +22,7 @@ export interface IStoreOptions {
 const getValues = mapValues((f: FieldStore) => f.value);
 const getErrors = mapValues((f: FieldStore) => f.errors);
 
-export default class Store {
+export class Store {
   @observable public submitting = false;
   @observable public fields: ObservableMap<FieldStore> = asMap<FieldStore>({});
   public errors: IObservableArray<string> = observable<string>([]);

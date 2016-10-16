@@ -16,4 +16,4 @@ export interface IFormobxOptions extends IStoreOptions {
 }
 export interface IForm extends React.ComponentClass<IFormobxProps> {
 }
-export default function formobx(component: React.ComponentClass<any>, options: IFormobxOptions): IForm;
+export declare function formobx(component: React.ComponentClass<any>, options: IFormobxOptions): IForm;

@@ -1,5 +1,5 @@
-import FormStore from '../../store';
-import Store from './store';
+import { Store as FormStore } from '../../store';
+import { Store } from './store';
 import * as React from 'react';
 const omit = require('lodash/fp/omit');
 
@@ -15,7 +15,7 @@ export interface IFieldContext {
   formStore: FormStore;
 }
 
-class Field extends React.Component<IFieldProps, {}> {
+export class Field extends React.Component<IFieldProps, {}> {
   public static contextTypes = {
     formStore: React.PropTypes.object.isRequired
   };
@@ -43,5 +43,3 @@ class Field extends React.Component<IFieldProps, {}> {
     );
   }
 }
-
-export default Field;

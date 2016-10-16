@@ -1,6 +1,6 @@
 import { IObservableArray } from 'mobx';
 import * as React from 'react';
-export default class Store {
+export declare class Store {
     value: string;
     errors: IObservableArray<string>;
     readonly asProps: {

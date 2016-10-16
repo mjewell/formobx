@@ -6,7 +6,7 @@ import {
 } from 'mobx';
 import * as React from 'react';
 
-export default class Store {
+export class Store {
   @observable public value = '';
   public errors: IObservableArray<string> = observable<string>([]);
 
