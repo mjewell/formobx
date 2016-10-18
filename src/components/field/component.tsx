@@ -5,27 +5,35 @@ const omit = require('lodash/fp/omit');
 
 const exceptComponent = omit('component');
 
-export interface IFieldProps {
-  component: React.ComponentClass<any>;
+export interface IWrappedFieldProps {
+  field: Store;
+}
+
+export interface IFieldProps<Props> {
+  component: React.ComponentClass<Props & IWrappedFieldProps>;
   name: string;
-  [prop: string]: any;
 }
 
 export interface IFieldContext {
   formStore: FormStore;
 }
 
-export class Field extends React.Component<IFieldProps, {}> {
+export class Field<Props> extends React.Component<Props & IFieldProps<Props>, {}> {
   public static contextTypes = {
     formStore: React.PropTypes.object.isRequired
   };
   public context: IFieldContext;
 
   private store: Store;
-  private component: React.ComponentClass<any>;
+  private component: React.ComponentClass<Props & IWrappedFieldProps>;
 
-  constructor(props: IFieldProps, context: IFieldContext) {
+  constructor(props: Props & IFieldProps<Props>, context: IFieldContext) {
     super(props, context);
+
+    if (!context.formStore) {
+      throw new Error('Fields must be used inside a component decorated with formobx');
+    }
+
     this.store = new Store();
     this.component = props.component;
   }

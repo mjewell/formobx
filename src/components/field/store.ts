@@ -7,8 +7,8 @@ import {
 import * as React from 'react';
 
 export class Store {
-  @observable public value = '';
-  public errors: IObservableArray<string> = observable<string>([]);
+  @observable public value: any;
+  public errors: IObservableArray<string> = observable([]);
 
   @computed
   get asProps() {
@@ -22,7 +22,7 @@ export class Store {
   }
 
   @action
-  public updateValue(val: string) {
+  public updateValue(val: any) {
     this.value = val;
   }
 

@@ -5,7 +5,7 @@ import * as React from 'react';
 const App = () => {
   return (
     <div>
-      <FormContainer />
+      <FormContainer title='Basic Example' />
       <DevTools />
     </div>
   );

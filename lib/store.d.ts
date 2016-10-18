@@ -13,12 +13,8 @@ export declare class Store {
     private initialValues;
     constructor(options: IStoreOptions);
     readonly fieldsJS: IKeyValueMap<FieldStore>;
-    readonly fieldValues: {
-        [s: string]: string;
-    };
-    readonly fieldErrors: {
-        [s: string]: string;
-    };
+    readonly fieldValues: IStringMap;
+    readonly fieldErrors: IStringMap;
     addField(name: string, field: FieldStore): void;
     updateSubmitting(submitting: boolean): void;
     clearErrors(): void;

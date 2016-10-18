@@ -25,7 +25,7 @@ const getErrors = mapValues((f: FieldStore) => f.errors);
 export class Store {
   @observable public submitting = false;
   @observable public fields: ObservableMap<FieldStore> = asMap<FieldStore>({});
-  public errors: IObservableArray<string> = observable<string>([]);
+  public errors: IObservableArray<string> = observable([]);
   private initialValues: IStringMap;
 
   constructor(options: IStoreOptions) {
@@ -33,17 +33,17 @@ export class Store {
   }
 
   @computed
-  get fieldsJS() {
+  get fieldsJS(): IKeyValueMap<FieldStore> {
     return this.fields.toJS();
   }
 
   @computed
-  get fieldValues(): { [s: string]: string } {
+  get fieldValues(): IStringMap {
     return getValues(this.fieldsJS);
   }
 
   @computed
-  get fieldErrors(): { [s: string]: string } {
+  get fieldErrors(): IStringMap {
     return getErrors(this.fieldsJS);
   }
 

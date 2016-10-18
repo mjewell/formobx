@@ -1,4 +1,4 @@
-import { IStoreOptions } from './store';
+import { IStoreOptions, Store } from './store';
 import * as React from 'react';
 export interface IOnSubmit {
     (field: {
@@ -8,12 +8,13 @@ export interface IOnSubmit {
 export interface IWrappedOnSubmit {
     (e: React.FormEvent<any>): void;
 }
-export interface IFormobxProps {
-    [prop: string]: any;
+export interface IWrappedFormProps {
+    form: Store;
+    onSubmit: IWrappedOnSubmit;
 }
 export interface IFormobxOptions extends IStoreOptions {
     onSubmit: IOnSubmit;
 }
-export interface IForm extends React.ComponentClass<IFormobxProps> {
+export interface IForm<Props> extends React.ComponentClass<Props> {
 }
-export declare function formobx(component: React.ComponentClass<any>, options: IFormobxOptions): IForm;
+export declare function formobx<Props>(component: React.ComponentClass<Props & IWrappedFormProps>, options: IFormobxOptions): IForm<Props>;

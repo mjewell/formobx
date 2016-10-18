@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "tslint 'src/*.ts{,x}'; exit 0",
-    "start": "webpack-dashboard -- node server.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -51,7 +51,6 @@
     "tslint-react": "^1.0.0",
     "typescript": "^2.1.0-dev.20160923",
     "webpack": "^1.13.1",
-    "webpack-dashboard": "^0.2.0",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {

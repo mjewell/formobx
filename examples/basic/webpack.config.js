@@ -1,6 +1,5 @@
 var path = require('path');
 var webpack = require('webpack');
-var DashboardPlugin = require('webpack-dashboard/plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -17,7 +16,6 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
-    new DashboardPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new HtmlWebpackPlugin({
