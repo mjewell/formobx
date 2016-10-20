@@ -8,7 +8,6 @@ const mapErrors = map((error: string) => <Error msg={error} />);
 
 export interface ISimpleFieldProps {
   type: string;
-  name: string;
 }
 
 export const SimpleField = observer<ISimpleFieldProps & IWrappedFieldProps>(

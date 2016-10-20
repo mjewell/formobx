@@ -4,6 +4,8 @@ A library for removing a lot of boilerplate from forms with Mobx. Inspired by
 [redux-form](https://github.com/erikras/redux-form) and following a similar API,
 but using [MobX](https://github.com/mobxjs/mobx) for state management.
 
+Work in progress - for up to date usage, look at the example projects.
+
 ## Usage:
 
 ```jsx

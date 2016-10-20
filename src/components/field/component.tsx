@@ -5,13 +5,16 @@ const omit = require('lodash/fp/omit');
 
 const exceptComponent = omit('component');
 
-export interface IWrappedFieldProps {
+export interface IPassedThroughProps {
+  name: string;
+}
+
+export interface IWrappedFieldProps extends IPassedThroughProps {
   field: Store;
 }
 
-export interface IFieldProps<Props> {
+export interface IFieldProps<Props> extends IPassedThroughProps {
   component: React.ComponentClass<Props & IWrappedFieldProps>;
-  name: string;
 }
 
 export interface IFieldContext {

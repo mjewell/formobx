@@ -9,7 +9,6 @@ const mapErrors = map((error: string) => <Error msg={error} />);
 
 export interface IComplexFieldProps {
   type: string;
-  name: string;
 }
 
 export const ComplexField = observer<IComplexFieldProps & IWrappedFieldProps>(
