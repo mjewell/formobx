@@ -1,4 +1,4 @@
-import { IWrappedFormProps } from '../../../lib';
+import { IWrappedFormProps, Section } from '../../../lib';
 import Error from './Error';
 import { ComplexField, ComplexFieldWrapper } from './fields/ComplexField';
 import { SimpleField, SimpleFieldWrapper } from './fields/SimpleField';
@@ -18,8 +18,10 @@ const Form = observer<IFormProps & IWrappedFormProps>(
       <h1>{title}</h1>
       <SimpleFieldWrapper name='email' type='text' component={SimpleField} />
       <SimpleFieldWrapper name='password' type='password' component={SimpleField} />
-      <ComplexFieldWrapper name='complex' type='text' component={ComplexField} />
-      <p>Form JSON: {JSON.stringify(form.fieldValues, null, 2)}</p>
+      <Section name='test'>
+        <ComplexFieldWrapper name='complex' type='text' component={ComplexField} />
+      </Section>
+      <p>Form JSON: {JSON.stringify(form.value, null, 2)}</p>
       <button type='submit' disabled={form.submitting}>
         Log In
       </button>

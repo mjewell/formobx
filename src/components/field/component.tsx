@@ -1,5 +1,5 @@
-import { Store as FormStore } from '../../store';
-import { Store } from './store';
+import { FormobxLeafStore } from '../../formobxLeafStore';
+import { ParentStore } from '../../formobxNodeStore';
 import * as React from 'react';
 const omit = require('lodash/fp/omit');
 
@@ -10,7 +10,7 @@ export interface IPassedThroughProps {
 }
 
 export interface IWrappedFieldProps extends IPassedThroughProps {
-  field: Store;
+  field: FormobxLeafStore;
 }
 
 export interface IFieldProps<Props> extends IPassedThroughProps {
@@ -18,31 +18,33 @@ export interface IFieldProps<Props> extends IPassedThroughProps {
 }
 
 export interface IFieldContext {
-  formStore: FormStore;
+  parentStore: ParentStore;
 }
 
 export class Field<Props> extends React.Component<Props & IFieldProps<Props>, {}> {
   public static contextTypes = {
-    formStore: React.PropTypes.object.isRequired
+    parentStore: React.PropTypes.object.isRequired
   };
   public context: IFieldContext;
-
-  private store: Store;
+  private store: FormobxLeafStore;
   private component: React.ComponentClass<Props & IWrappedFieldProps>;
 
   constructor(props: Props & IFieldProps<Props>, context: IFieldContext) {
     super(props, context);
 
-    if (!context.formStore) {
+    if (!context.parentStore) {
       throw new Error('Fields must be used inside a component decorated with formobx');
     }
 
-    this.store = new Store();
+    this.store = new FormobxLeafStore();
     this.component = props.component;
   }
 
   public componentDidMount() {
-    this.context.formStore.addField(this.props.name, this.store);
+    this.context.parentStore.registerField(
+      this.props.name,
+      this.store
+    );
   }
 
   public render() {

@@ -1,4 +1,5 @@
-import { IStoreOptions, Store } from './store';
+import { FormobxRootStore, IStoreOptions } from './formobxRootStore';
+import { IStringMap } from './types';
 import * as React from 'react';
 
 export interface IOnSubmit {
@@ -10,24 +11,25 @@ export interface IWrappedOnSubmit {
 }
 
 export interface IWrappedFormProps {
-  form: Store;
+  form: FormobxRootStore;
   onSubmit: IWrappedOnSubmit;
 }
 
 export interface IFormobxOptions extends IStoreOptions {
   onSubmit: IOnSubmit;
+  initialValues?: IStringMap;
 }
 
 export interface IForm<Props> extends React.ComponentClass<Props> { }
 
-function wrapOnSubmit(store: Store, callback: IOnSubmit) {
+function wrapOnSubmit(store: FormobxRootStore, callback: IOnSubmit) {
   return (e: React.FormEvent<any>) => {
     e.preventDefault();
-    store.updateSubmitting(true);
+    store.setSubmitting(true);
     store.clearErrors();
-    Promise.resolve(callback(store.fieldValues))
-      .catch(result => store.updateAllErrors(result))
-      .then(() => store.updateSubmitting(false));
+    Promise.resolve(callback(store.value))
+      .catch(result => store.setAllErrors(result))
+      .then(() => store.setSubmitting(false));
   };
 }
 
@@ -37,15 +39,15 @@ export function formobx<Props>(
 ): IForm<Props> {
   return class Form extends React.Component<Props, {}> {
     public static childContextTypes = {
-      formStore: React.PropTypes.object
+      parentStore: React.PropTypes.object
     };
-    private store: Store;
+    private store: FormobxRootStore;
     private component: React.ComponentClass<Props & IWrappedFormProps>;
     private onSubmit: IWrappedOnSubmit;
 
     constructor(props: Props) {
       super(props);
-      this.store = new Store(options);
+      this.store = new FormobxRootStore(options);
       this.component = component;
 
       if (options.onSubmit) {
@@ -54,7 +56,7 @@ export function formobx<Props>(
     }
 
     public getChildContext() {
-      return { formStore: this.store };
+      return { parentStore: this.store };
     }
 
     public render() {

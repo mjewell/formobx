@@ -1,4 +1,5 @@
-import { IStoreOptions, Store } from './store';
+import { FormobxRootStore, IStoreOptions } from './formobxRootStore';
+import { IStringMap } from './types';
 import * as React from 'react';
 export interface IOnSubmit {
     (field: {
@@ -9,11 +10,12 @@ export interface IWrappedOnSubmit {
     (e: React.FormEvent<any>): void;
 }
 export interface IWrappedFormProps {
-    form: Store;
+    form: FormobxRootStore;
     onSubmit: IWrappedOnSubmit;
 }
 export interface IFormobxOptions extends IStoreOptions {
     onSubmit: IOnSubmit;
+    initialValues?: IStringMap;
 }
 export interface IForm<Props> extends React.ComponentClass<Props> {
 }

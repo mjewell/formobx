@@ -17,7 +17,7 @@ export const ComplexField = observer<IComplexFieldProps & IWrappedFieldProps>(
       <label>{name}: </label>
       <input
         defaultValue={field.value && field.value.original}
-        onChange={(e: any) => field.updateValue({ original: e.target.value, upcased: toUpper(e.target.value) })}
+        onChange={(e: any) => field.setValue({ original: e.target.value, upcased: toUpper(e.target.value) })}
         type={type}
         />
       {mapErrors(field.errors)}
