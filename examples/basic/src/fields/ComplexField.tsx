@@ -1,4 +1,4 @@
-import { IWrappedFieldProps, createFieldWrapper } from '../../../../lib';
+import { IMultiFieldWrappedFieldProps, createMultiFieldWrapper } from '../../../../lib';
 import Error from '../Error';
 import * as toUpper from 'lodash/toUpper';
 import { observer } from 'mobx-react';
@@ -11,19 +11,20 @@ export interface IComplexFieldProps {
   type: string;
 }
 
-export const ComplexField = observer<IComplexFieldProps & IWrappedFieldProps>(
-  ({ field, type, name }) => (
+export const ComplexField = observer<IComplexFieldProps & IMultiFieldWrappedFieldProps>(
+  ({ fields: { original, upcased }, type, names }) => (
     <div>
-      <label>{name}: </label>
+      <label>{names.join(' & ')}: </label>
       <input
-        defaultValue={field.value && field.value.original}
-        onChange={(e: any) => field.setValue({ original: e.target.value, upcased: toUpper(e.target.value) })}
+        value={original.value}
+        onChange={(e: any) => { original.setValue(e.target.value); upcased.setValue(toUpper(e.target.value)); } }
         type={type}
         />
-      {mapErrors(field.errors)}
-      <p>Preview: {JSON.stringify(field.value, null, 2)}</p>
+      {mapErrors(original.errors)}
+      {mapErrors(upcased.errors)}
+      <p>Preview: {JSON.stringify({ original: original.value, upcased: upcased.value }, null, 2)}</p>
     </div>
   )
 );
 
-export const ComplexFieldWrapper = createFieldWrapper<IComplexFieldProps>();
+export const ComplexFieldWrapper = createMultiFieldWrapper<IComplexFieldProps>();

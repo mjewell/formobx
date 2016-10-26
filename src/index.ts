@@ -1,4 +1,5 @@
 export * from './components/field';
+export * from './components/multiField';
 export * from './components/section';
 export * from './formobx';
 export * from './utils';

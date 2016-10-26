@@ -7,7 +7,7 @@ export declare class FormobxLeafStore {
     errors: IObservableArray<string>;
     readonly asProps: {
         onChange: (e: React.FormEvent<any>) => void;
-        defaultValue: any;
+        value: any;
     };
     setInitialValues(initialValue: any): void;
     setValue(val: any): void;

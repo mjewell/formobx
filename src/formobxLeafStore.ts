@@ -9,17 +9,17 @@ import * as React from 'react';
 
 export class FormobxLeafStore {
   public parent: ParentStore;
-  @observable public value: any;
+  @observable public value: any = '';
   public errors: IObservableArray<string> = observable<string>([]);
 
   @computed
   get asProps() {
     return {
-      defaultValue: this.value,
       onChange: (e: React.FormEvent<any>) => {
         const target = e.target as any;
         this.setValue(target.value);
-      }
+      },
+      value: this.value
     };
   }
 

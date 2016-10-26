@@ -1,4 +1,4 @@
-import { Field, IFieldContext, IFieldProps } from '../components/field/component';
+import { Field, IFieldContext, IFieldProps } from '../components/field';
 
 export function createFieldWrapper<IProps>() {
   return Field as new (

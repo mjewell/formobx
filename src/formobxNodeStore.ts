@@ -50,6 +50,7 @@ export class FormobxNodeStore {
       return;
     }
     this.initialValues = initialValues;
+    this.fields.keys().forEach(key => this.fields.get(key).setInitialValues(initialValues[key]));
   }
 
   @action

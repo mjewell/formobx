@@ -1,4 +1,4 @@
-import { IWrappedFieldProps, createFieldWrapper } from '../../../../lib';
+import { IFieldWrappedFieldProps, createFieldWrapper } from '../../../../lib';
 import Error from '../Error';
 import { observer } from 'mobx-react';
 import * as React from 'react';
@@ -10,7 +10,7 @@ export interface ISimpleFieldProps {
   type: string;
 }
 
-export const SimpleField = observer<ISimpleFieldProps & IWrappedFieldProps>(
+export const SimpleField = observer<ISimpleFieldProps & IFieldWrappedFieldProps>(
   ({ field, type, name }) => (
     <div>
       <label>{name}: </label>

@@ -18,8 +18,8 @@ const Form = observer<IFormProps & IWrappedFormProps>(
       <h1>{title}</h1>
       <SimpleFieldWrapper name='email' type='text' component={SimpleField} />
       <SimpleFieldWrapper name='password' type='password' component={SimpleField} />
-      <Section name='test'>
-        <ComplexFieldWrapper name='complex' type='text' component={ComplexField} />
+      <Section name='nested'>
+        <ComplexFieldWrapper names={['original', 'upcased']} type='text' component={ComplexField} />
       </Section>
       <p>Form JSON: {JSON.stringify(form.value, null, 2)}</p>
       <button type='submit' disabled={form.submitting}>

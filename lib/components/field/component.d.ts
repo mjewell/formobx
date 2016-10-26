@@ -1,14 +1,14 @@
 import { FormobxLeafStore } from '../../formobxLeafStore';
 import { ParentStore } from '../../formobxNodeStore';
 import * as React from 'react';
-export interface IPassedThroughProps {
+export interface IFieldPassedThroughProps {
     name: string;
 }
-export interface IWrappedFieldProps extends IPassedThroughProps {
+export interface IFieldWrappedFieldProps extends IFieldPassedThroughProps {
     field: FormobxLeafStore;
 }
-export interface IFieldProps<Props> extends IPassedThroughProps {
-    component: React.ComponentClass<Props & IWrappedFieldProps>;
+export interface IFieldProps<Props> extends IFieldPassedThroughProps {
+    component: React.ComponentClass<Props & IFieldWrappedFieldProps>;
 }
 export interface IFieldContext {
     parentStore: ParentStore;

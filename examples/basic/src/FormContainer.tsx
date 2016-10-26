@@ -4,7 +4,11 @@ import * as Promise from 'bluebird';
 
 export default formobx(Form, {
   initialValues: {
-    email: 'my@email.com'
+    email: 'my@email.com',
+    nested: {
+      original: 'test',
+      upcased: 'TEST'
+    }
   },
   onSubmit: () => Promise.delay(1000).then(() => {
     throw {
