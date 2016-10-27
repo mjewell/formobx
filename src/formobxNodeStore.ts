@@ -1,6 +1,6 @@
 import { FormobxLeafStore } from './formobxLeafStore';
 import { FormobxRootStore } from './formobxRootStore';
-import { IMap } from './types';
+import { IFormobxErrors, IMap } from './types';
 import * as keys from 'lodash/keys';
 import {
   IObservableArray,
@@ -16,6 +16,10 @@ export type ChildStore = FormobxLeafStore | FormobxNodeStore;
 export type ParentStore = FormobxNodeStore | FormobxRootStore;
 
 const getValues = mapValues((f: ChildStore) => f.value);
+
+function isNodeStore(store: ChildStore): store is FormobxNodeStore {
+  return <FormobxNodeStore>store !== undefined;
+}
 
 export class FormobxNodeStore {
   public parent: ParentStore;
@@ -36,6 +40,10 @@ export class FormobxNodeStore {
   public registerField(name: string, field: ChildStore) {
     if (this.fields.has(name)) {
       throw new Error(`Field with name '${name}' already exists on this part of the form`);
+    }
+
+    if (name === '_base') {
+      throw new Error("Field cannot have reserved name '_base'");
     }
 
     this.fields.set(name, field);
@@ -60,18 +68,18 @@ export class FormobxNodeStore {
   }
 
   @action
-  public setErrors(errors: string[]) {
-    this.errors.replace(errors);
-  }
-
-  @action
-  public setAllErrors(errors: { [s: string]: string[] | undefined, _base?: string[] }) {
+  public setErrors(errors: IFormobxErrors) {
     keys(errors).forEach(key => {
-      if (this.fields.has(key)) {
-        this.fields.get(key).setErrors(errors[key] || []);
+      const field = this.fields.get(key);
+      if (field) {
+        if (isNodeStore(field)) {
+          field.setErrors(errors[key] as IFormobxErrors);
+        } else {
+          field.setErrors(errors[key] as string[]);
+        }
       }
     });
 
-    this.setErrors(errors._base || []);
+    this.errors.replace(errors._base || []);
   }
 }

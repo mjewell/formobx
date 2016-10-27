@@ -1,9 +1,9 @@
 import { FormobxRootStore, IStoreOptions } from './formobxRootStore';
-import { IMap } from './types';
+import { IMap, IStringMap } from './types';
 import * as React from 'react';
 
 export interface IOnSubmit {
-  (field: { [s: string]: string }): any;
+  (field: IStringMap): any;
 }
 
 export interface IWrappedOnSubmit {
@@ -28,7 +28,7 @@ function wrapOnSubmit(store: FormobxRootStore, callback: IOnSubmit) {
     store.setSubmitting(true);
     store.clearErrors();
     Promise.resolve(callback(store.value))
-      .catch(result => store.setAllErrors(result))
+      .catch(result => store.setErrors(result))
       .then(() => store.setSubmitting(false));
   };
 }

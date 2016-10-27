@@ -17,7 +17,10 @@ export default formobx(Form, {
       password: [
         'is not strong enough',
         'and something else'
-      ]
+      ],
+      nested: {
+        original: ['nested errors too']
+      }
     };
   })
 });
