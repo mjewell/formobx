@@ -10,7 +10,7 @@ export default formobx(Form, {
       upcased: 'TEST'
     }
   },
-  onSubmit: () => Promise.delay(1000).then(() => {
+  onSubmit: () => Promise.delay(500).then(() => {
     throw {
       _base: ['the form has some issues'],
       email: ['is wrong somehow'],
@@ -19,7 +19,8 @@ export default formobx(Form, {
         'and something else'
       ],
       nested: {
-        original: ['nested errors too']
+        // TODO: handle _base errors here
+        original: ['inside nested object errors too']
       }
     };
   })

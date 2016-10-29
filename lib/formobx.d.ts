@@ -1,4 +1,4 @@
-import { FormobxRootStore, IStoreOptions } from './formobxRootStore';
+import { FormStore, IFormStoreOptions } from './stores';
 import { IMap, IStringMap } from './types';
 import * as React from 'react';
 export interface IOnSubmit {
@@ -8,10 +8,10 @@ export interface IWrappedOnSubmit {
     (e: React.FormEvent<any>): void;
 }
 export interface IWrappedFormProps {
-    form: FormobxRootStore;
+    form: FormStore;
     onSubmit: IWrappedOnSubmit;
 }
-export interface IFormobxOptions extends IStoreOptions {
+export interface IFormobxOptions extends IFormStoreOptions {
     onSubmit: IOnSubmit;
     initialValues?: IMap;
 }

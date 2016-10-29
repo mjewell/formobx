@@ -1,11 +1,11 @@
-import { FormobxLeafStore } from '../../formobxLeafStore';
-import { ParentStore } from '../../formobxNodeStore';
+import { FieldStore } from '../../stores';
+import { IContext } from '../../types';
 import * as React from 'react';
 export interface IMultiFieldPassedThroughProps {
-    names: string[];
+    names?: string[];
 }
 export interface IMultiFieldStores {
-    [name: string]: FormobxLeafStore;
+    [name: string]: FieldStore;
 }
 export interface IMultiFieldWrappedFieldProps extends IMultiFieldPassedThroughProps {
     fields: IMultiFieldStores;
@@ -13,17 +13,14 @@ export interface IMultiFieldWrappedFieldProps extends IMultiFieldPassedThroughPr
 export interface IMultiFieldProps<Props> extends IMultiFieldPassedThroughProps {
     component: React.ComponentClass<Props & IMultiFieldWrappedFieldProps>;
 }
-export interface IMultiFieldContext {
-    parentStore: ParentStore;
-}
 export declare class MultiField<Props> extends React.Component<Props & IMultiFieldProps<Props>, {}> {
     static contextTypes: {
         parentStore: React.Validator<any>;
     };
-    context: IMultiFieldContext;
+    context: IContext;
     private stores;
     private component;
-    constructor(props: Props & IMultiFieldProps<Props>, context: IMultiFieldContext);
+    constructor(props: Props & IMultiFieldProps<Props>, context: IContext);
     componentDidMount(): void;
     render(): JSX.Element;
 }

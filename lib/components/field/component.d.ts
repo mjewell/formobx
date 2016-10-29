@@ -1,26 +1,23 @@
-import { FormobxLeafStore } from '../../formobxLeafStore';
-import { ParentStore } from '../../formobxNodeStore';
+import { FieldStore } from '../../stores';
+import { IContext } from '../../types';
 import * as React from 'react';
 export interface IFieldPassedThroughProps {
-    name: string;
+    name?: string;
 }
 export interface IFieldWrappedFieldProps extends IFieldPassedThroughProps {
-    field: FormobxLeafStore;
+    field: FieldStore;
 }
 export interface IFieldProps<Props> extends IFieldPassedThroughProps {
     component: React.ComponentClass<Props & IFieldWrappedFieldProps>;
-}
-export interface IFieldContext {
-    parentStore: ParentStore;
 }
 export declare class Field<Props> extends React.Component<Props & IFieldProps<Props>, {}> {
     static contextTypes: {
         parentStore: React.Validator<any>;
     };
-    context: IFieldContext;
+    context: IContext;
     private store;
     private component;
-    constructor(props: Props & IFieldProps<Props>, context: IFieldContext);
+    constructor(props: Props & IFieldProps<Props>, context: IContext);
     componentDidMount(): void;
     render(): JSX.Element;
 }

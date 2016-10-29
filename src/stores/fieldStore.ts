@@ -1,13 +1,8 @@
-import { ParentStore } from './formobxNodeStore';
-import {
-  IObservableArray,
-  action,
-  computed,
-  observable
-} from 'mobx';
+import { ParentStore } from './types';
+import { IObservableArray, action, computed, observable } from 'mobx';
 import * as React from 'react';
 
-export class FormobxLeafStore {
+export class FieldStore {
   public parent: ParentStore;
   @observable public value: any = '';
   public errors: IObservableArray<string> = observable<string>([]);

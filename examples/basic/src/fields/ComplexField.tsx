@@ -14,7 +14,7 @@ export interface IComplexFieldProps {
 export const ComplexField = observer<IComplexFieldProps & IMultiFieldWrappedFieldProps>(
   ({ fields: { original, upcased }, type, names }) => (
     <div>
-      <label>{names.join(' & ')}: </label>
+      <label>{(names || []).join(' & ')}: </label>
       <input
         value={original.value}
         onChange={(e: any) => { original.setValue(e.target.value); upcased.setValue(toUpper(e.target.value)); } }

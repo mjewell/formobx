@@ -1,6 +1,6 @@
-import { FormobxLeafStore } from './formobxLeafStore';
-import { FormobxRootStore } from './formobxRootStore';
-import { IFormobxErrors, IMap } from './types';
+import { IMap, IObjectErrors, isArrayErrors, isFieldErrors, isObjectErrors } from '../types';
+import { ArrayStore } from './arrayStore';
+import { ChildStore, ParentStore } from './types';
 import * as keys from 'lodash/keys';
 import {
   IObservableArray,
@@ -12,16 +12,9 @@ import {
 } from 'mobx';
 const mapValues = require('lodash/fp/mapValues');
 
-export type ChildStore = FormobxLeafStore | FormobxNodeStore;
-export type ParentStore = FormobxNodeStore | FormobxRootStore;
+const mapValuesToJS = mapValues((f: ChildStore) => f.value);
 
-const getValues = mapValues((f: ChildStore) => f.value);
-
-function isNodeStore(store: ChildStore): store is FormobxNodeStore {
-  return <FormobxNodeStore>store !== undefined;
-}
-
-export class FormobxNodeStore {
+export class ObjectStore {
   public parent: ParentStore;
   @observable public fields: ObservableMap<ChildStore> = asMap<ChildStore>({});
   public errors: IObservableArray<string> = observable<string>([]);
@@ -33,7 +26,7 @@ export class FormobxNodeStore {
 
   @computed
   get value() {
-    return getValues(this.fields.toJS());
+    return mapValuesToJS(this.fields.toJS());
   }
 
   @action
@@ -68,14 +61,23 @@ export class FormobxNodeStore {
   }
 
   @action
-  public setErrors(errors: IFormobxErrors) {
+  public setErrors(errors: IObjectErrors) {
     keys(errors).forEach(key => {
       const field = this.fields.get(key);
+      const error = errors[key];
       if (field) {
-        if (isNodeStore(field)) {
-          field.setErrors(errors[key] as IFormobxErrors);
+        if (field instanceof ArrayStore) {
+          if (isArrayErrors(error)) {
+            field.setErrors(error);
+          }
+        } else if (field instanceof ObjectStore) {
+          if (isObjectErrors(error)) {
+            field.setErrors(error);
+          }
         } else {
-          field.setErrors(errors[key] as string[]);
+          if (isFieldErrors(error)) {
+            field.setErrors(error);
+          }
         }
       }
     });

@@ -1,8 +1,9 @@
-import { IMultiFieldContext, IMultiFieldProps, MultiField } from '../components/multiField';
+import { IMultiFieldProps, MultiField } from '../components/multiField';
+import { IContext } from '../types';
 
 export function createMultiFieldWrapper<IProps>() {
   return MultiField as new (
     props: IProps & IMultiFieldProps<IProps>,
-    context: IMultiFieldContext
+    context: IContext
   ) => MultiField<IProps>;
 };

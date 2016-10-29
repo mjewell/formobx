@@ -1,2 +1,3 @@
-import { Field, IFieldContext, IFieldProps } from '../components/field';
-export declare function createFieldWrapper<IProps>(): new (props: IProps & IFieldProps<IProps>, context: IFieldContext) => Field<IProps>;
+import { Field, IFieldProps } from '../components/field';
+import { IContext } from '../types';
+export declare function createFieldWrapper<IProps>(): new (props: IProps & IFieldProps<IProps>, context: IContext) => Field<IProps>;
