@@ -1,8 +1,8 @@
-import { formobx } from '../../../lib';
+import { form } from '../../../lib';
 import Form from './Form';
 import * as Promise from 'bluebird';
 
-export default formobx(Form, {
+export default form(Form, {
   initialValues: {
     email: 'my@email.com',
     nested: {

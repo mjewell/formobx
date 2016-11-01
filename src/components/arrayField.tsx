@@ -1,12 +1,12 @@
-import { ArrayStore } from '../../stores';
-import { IContext } from '../../types';
+import { ArrayStore } from '../stores';
+import { IContext } from '../types';
 import * as React from 'react';
 
-export interface IProps {
+export interface IArrayFieldProps {
   name?: string;
 }
 
-export class ArrayField extends React.Component<IProps, {}> {
+export class ArrayField extends React.Component<IArrayFieldProps, {}> {
   public static contextTypes = {
     parentStore: React.PropTypes.object.isRequired
   };
@@ -16,7 +16,7 @@ export class ArrayField extends React.Component<IProps, {}> {
   public context: IContext;
   private store: ArrayStore;
 
-  constructor(props: IProps, context: IContext) {
+  constructor(props: IArrayFieldProps, context: IContext) {
     super(props, context);
 
     if (!context.parentStore) {

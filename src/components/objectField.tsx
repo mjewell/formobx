@@ -1,5 +1,5 @@
-import { ArrayStore, ObjectStore } from '../../stores';
-import { IContext } from '../../types';
+import { ArrayStore, ObjectStore } from '../stores';
+import { IContext } from '../types';
 import * as React from 'react';
 
 export interface IObjectFieldProps {

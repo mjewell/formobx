@@ -1,5 +1,5 @@
-import { FormStore, IFormStoreOptions } from './stores';
-import { IMap, IStringMap } from './types';
+import { FormStore, IFormStoreOptions } from '../stores';
+import { IMap, IStringMap } from '../types';
 import * as React from 'react';
 
 export interface IOnSubmit {
@@ -15,7 +15,7 @@ export interface IWrappedFormProps {
   onSubmit: IWrappedOnSubmit;
 }
 
-export interface IFormobxOptions extends IFormStoreOptions {
+export interface IFormOptions extends IFormStoreOptions {
   onSubmit: IOnSubmit;
   initialValues?: IMap;
 }
@@ -33,22 +33,20 @@ function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
   };
 }
 
-export function formobx<Props>(
-  component: React.ComponentClass<Props & IWrappedFormProps>,
-  options: IFormobxOptions
+export function form<Props>(
+  Component: React.ComponentClass<Props & IWrappedFormProps>,
+  options: IFormOptions
 ): IForm<Props> {
   return class Form extends React.Component<Props, {}> {
     public static childContextTypes = {
       parentStore: React.PropTypes.object
     };
     private store: FormStore;
-    private component: React.ComponentClass<Props & IWrappedFormProps>;
     private onSubmit: IWrappedOnSubmit;
 
     constructor(props: Props) {
       super(props);
       this.store = new FormStore(options);
-      this.component = component;
 
       if (options.onSubmit) {
         this.onSubmit = wrapOnSubmit(this.store, options.onSubmit);
@@ -60,13 +58,7 @@ export function formobx<Props>(
     }
 
     public render() {
-      return (
-        <this.component
-          {...this.props}
-          form={this.store}
-          onSubmit={this.onSubmit}
-          />
-      );
+      return <Component {...this.props} form={this.store} onSubmit={this.onSubmit} />;
     }
   };
 }
