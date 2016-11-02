@@ -1,30 +1,27 @@
-import { IWrappedFieldProps, createFieldWrapper } from '../../../../lib';
-import Error from '../Error';
+import { IWrappedMultiFieldProps, multiField } from '../../../../lib';
+import { mapErrors } from '../Error';
 import * as toUpper from 'lodash/toUpper';
 import { observer } from 'mobx-react';
 import * as React from 'react';
-const map = require('lodash/fp/map');
-
-const mapErrors = map((error: string) => <Error msg={error} />);
+import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 
 export interface IComplexFieldProps {
   type: string;
-  name: string;
 }
 
-export const ComplexField = observer<IComplexFieldProps & IWrappedFieldProps>(
-  ({ field, type, name }) => (
-    <div>
-      <label>{name}: </label>
-      <input
-        defaultValue={field.value && field.value.original}
-        onChange={(e: any) => field.updateValue({ original: e.target.value, upcased: toUpper(e.target.value) })}
-        type={type}
-        />
-      {mapErrors(field.errors)}
-      <p>Preview: {JSON.stringify(field.value, null, 2)}</p>
-    </div>
+export const ComplexField = multiField(
+  observer<IComplexFieldProps & IWrappedMultiFieldProps>(
+    ({ fields: { original, upcased }, type, names }) => (
+      <FormGroup validationState={original.errors.length || upcased.errors.length ? 'error' : undefined}>
+        {names && <ControlLabel>{(names || []).join(' & ')}</ControlLabel>}
+        <FormControl
+          type={type}
+          value={original.value}
+          onChange={(e: any) => { original.setValue(e.target.value); upcased.setValue(toUpper(e.target.value)); } }
+          />
+        {mapErrors(original.errors)}
+        {mapErrors(upcased.errors)}
+      </FormGroup>
+    )
   )
 );
-
-export const ComplexFieldWrapper = createFieldWrapper<IComplexFieldProps>();

@@ -1,31 +1,63 @@
-import { IWrappedFormProps } from '../../../lib';
-import Error from './Error';
-import { ComplexField, ComplexFieldWrapper } from './fields/ComplexField';
-import { SimpleField, SimpleFieldWrapper } from './fields/SimpleField';
+import { ArrayField, IWrappedFormProps, ObjectField } from '../../../lib';
+import { mapErrors } from './Error';
+import { BaseErrors } from './fields/BaseErrors';
+import { ComplexField } from './fields/ComplexField';
+import { CustomArrayField } from './fields/CustomArrayField';
+import { InputField } from './fields/InputField';
+import { SimpleField } from './fields/SimpleField';
 import { observer } from 'mobx-react';
 import * as React from 'react';
-const map = require('lodash/fp/map');
-
-const mapErrors = map((error: string) => <Error msg={error} />);
+import { Button, ControlLabel, PageHeader, Panel } from 'react-bootstrap';
+const JSONTree = require('react-json-tree').default;
 
 export interface IFormProps {
   title: string;
 }
 
 const Form = observer<IFormProps & IWrappedFormProps>(
-  ({form, onSubmit, title }) => (
-    <form onSubmit={onSubmit}>
-      <h1>{title}</h1>
-      <SimpleFieldWrapper name='email' type='text' component={SimpleField} />
-      <SimpleFieldWrapper name='password' type='password' component={SimpleField} />
-      <ComplexFieldWrapper name='complex' type='text' component={ComplexField} />
-      <p>Form JSON: {JSON.stringify(form.fieldValues, null, 2)}</p>
-      <button type='submit' disabled={form.submitting}>
-        Log In
-      </button>
-      {mapErrors(form.errors)}
-    </form>
-  )
+  ({ form, onSubmit, title }) => {
+    return (
+      <form onSubmit={onSubmit}>
+        <PageHeader>{title}</PageHeader>
+        <Panel header='Basic Input Field'>
+          <ControlLabel>test</ControlLabel>
+          <InputField name='test' type='text' style={{ display: 'block' }} />
+        </Panel>
+
+        <Panel header='Custom Input Components'>
+          <SimpleField name='email' type='text' />
+          <SimpleField name='password' type='password' />
+        </Panel>
+
+        <Panel header='Connected Inputs'>
+          <ComplexField names={['original', 'upcased']} type='text' />
+        </Panel>
+
+        <Panel header='Objects'>
+          <ObjectField name='object'>
+            <BaseErrors />
+            <SimpleField name='nestedFieldA' type='text' />
+            <SimpleField name='nestedFieldB' type='text' />
+          </ObjectField>
+        </Panel>
+
+        <Panel header='Arrays'>
+          <ArrayField name='array'>
+            <BaseErrors />
+            <CustomArrayField />
+          </ArrayField>
+        </Panel>
+
+        {mapErrors(form.errors)}
+
+        <JSONTree data={form.value} shouldExpandNode={() => true} />
+
+        <Button bsStyle='primary' type='submit' disabled={form.submitting}>
+          Log In
+        </Button>
+      </form>
+    );
+  }
 );
 
 export default Form;

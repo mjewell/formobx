@@ -1,4 +1,4 @@
-export * from './components/field';
-export * from './formobx';
-export * from './utils';
-export { Store as FormStore } from './store';
+export * from './components';
+export * from './factories';
+export * from './types';
+export * from './stores';

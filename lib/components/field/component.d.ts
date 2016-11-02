@@ -1,24 +1,23 @@
-import { Store as FormStore } from '../../store';
-import { Store } from './store';
+import { FieldStore } from '../../stores';
+import { IContext } from '../../types';
 import * as React from 'react';
-export interface IWrappedFieldProps {
-    field: Store;
+export interface IFieldPassedThroughProps {
+    name?: string;
 }
-export interface IFieldProps<Props> {
-    component: React.ComponentClass<Props & IWrappedFieldProps>;
-    name: string;
+export interface IFieldWrappedFieldProps extends IFieldPassedThroughProps {
+    field: FieldStore;
 }
-export interface IFieldContext {
-    formStore: FormStore;
+export interface IFieldProps<Props> extends IFieldPassedThroughProps {
+    component: React.ComponentClass<Props & IFieldWrappedFieldProps>;
 }
 export declare class Field<Props> extends React.Component<Props & IFieldProps<Props>, {}> {
     static contextTypes: {
-        formStore: React.Validator<any>;
+        parentStore: React.Validator<any>;
     };
-    context: IFieldContext;
+    context: IContext;
     private store;
     private component;
-    constructor(props: Props & IFieldProps<Props>, context: IFieldContext);
+    constructor(props: Props & IFieldProps<Props>, context: IContext);
     componentDidMount(): void;
     render(): JSX.Element;
 }
