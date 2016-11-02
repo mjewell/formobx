@@ -12,12 +12,6 @@ export interface IWrappedFieldProps extends IPassedThroughFieldProps {
 
 export interface IFieldComponent<Props> extends React.ComponentClass<Props & IPassedThroughFieldProps> { }
 
-/*
-  TODO:
-  make a HOC parent function
-  fields take a string as first arg for standard input components
-*/
-
 export function field<Props>(
   Component: React.ComponentClass<Props & IWrappedFieldProps> | string
 ): IFieldComponent<Props & IPassedThroughFieldProps> {
@@ -47,6 +41,18 @@ export function field<Props>(
           throw new Error('Name is required when the parent is not an ArrayField');
         }
         parentStore.registerField(this.props.name, this.store);
+      }
+    }
+
+    public componentWillUnmount() {
+      const parentStore = this.context.parentStore;
+      if (parentStore instanceof ArrayStore) {
+        parentStore.unregisterField(this.store);
+      } else {
+        if (!this.props.name) {
+          throw new Error('Name is required when the parent is not an ArrayField');
+        }
+        parentStore.unregisterField(this.props.name);
       }
     }
 

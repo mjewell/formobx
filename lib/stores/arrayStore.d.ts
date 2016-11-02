@@ -9,6 +9,7 @@ export declare class ArrayStore {
     constructor();
     readonly value: any;
     registerField(field: ChildStore): void;
+    unregisterField(field: ChildStore): void;
     setInitialValues(initialValues?: any): void;
     clearErrors(): void;
     setErrors(errors: IArrayErrors): void;

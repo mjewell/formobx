@@ -4,8 +4,8 @@ import * as React from 'react';
 
 const App = () => {
   return (
-    <div>
-      <FormContainer title='Basic Example' />
+    <div style={{ margin: 'auto', maxWidth: '900px' }}>
+      <FormContainer title='Demo' />
       <DevTools />
     </div>
   );

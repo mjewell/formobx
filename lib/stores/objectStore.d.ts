@@ -9,6 +9,7 @@ export declare class ObjectStore {
     constructor();
     readonly value: any;
     registerField(name: string, field: ChildStore): void;
+    unregisterField(name: string): void;
     setInitialValues(initialValues?: any): void;
     clearErrors(): void;
     setErrors(errors: IObjectErrors): void;

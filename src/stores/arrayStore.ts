@@ -26,6 +26,11 @@ export class ArrayStore {
   }
 
   @action
+  public unregisterField(field: ChildStore) {
+    this.fields.remove(field);
+  }
+
+  @action
   public setInitialValues(initialValues?: any) {
     if (!initialValues) {
       this.initialValues = [];

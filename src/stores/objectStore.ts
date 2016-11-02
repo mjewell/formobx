@@ -45,6 +45,11 @@ export class ObjectStore {
   }
 
   @action
+  public unregisterField(name: string) {
+    this.fields.delete(name);
+  }
+
+  @action
   public setInitialValues(initialValues?: any) {
     if (!initialValues) {
       this.initialValues = {};
