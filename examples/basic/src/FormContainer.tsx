@@ -21,7 +21,7 @@ export default form(Form, {
         nestedFieldA: ['and inside the object too']
       },
       array: [
-        { arrayField: ['fuck'] }
+        { arrayField: ['array errors too'] }
       ]
     };
   })
