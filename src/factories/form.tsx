@@ -1,5 +1,7 @@
 import { FormStore, IFormStoreOptions } from '../stores';
 import { IMap, IStringMap } from '../types';
+import { observer } from 'mobx-react';
+import { Component, ComponentClass, FormEvent, PropTypes, StatelessComponent } from 'react';
 import * as React from 'react';
 
 export interface IOnSubmit {
@@ -7,7 +9,7 @@ export interface IOnSubmit {
 }
 
 export interface IWrappedOnSubmit {
-  (e: React.FormEvent<any>): void;
+  (e: FormEvent<any>): void;
 }
 
 export interface IWrappedFormProps {
@@ -20,10 +22,8 @@ export interface IFormOptions extends IFormStoreOptions {
   initialValues?: IMap;
 }
 
-export interface IForm<Props> extends React.ComponentClass<Props> { }
-
 function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
-  return (e: React.FormEvent<any>) => {
+  return (e: FormEvent<any>) => {
     e.preventDefault();
     store.setSubmitting(true);
     store.clearErrors();
@@ -33,32 +33,36 @@ function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
   };
 }
 
-export function form<Props>(
-  Component: React.ComponentClass<Props & IWrappedFormProps>,
-  options: IFormOptions
-): IForm<Props> {
-  return class Form extends React.Component<Props, {}> {
-    public static childContextTypes = {
-      parentStore: React.PropTypes.object
-    };
-    private store: FormStore;
-    private onSubmit: IWrappedOnSubmit;
+export function form<Props>(options: IFormOptions) {
+  type ReactComponent = ComponentClass<Props & IWrappedFormProps> | StatelessComponent<Props & IWrappedFormProps>;
+  return (WrappedComponent: ReactComponent): ComponentClass<Props> => {
+    const WC = observer(WrappedComponent as ComponentClass<Props & IWrappedFormProps>);
 
-    constructor(props: Props) {
-      super(props);
-      this.store = new FormStore(options);
+    class Form extends Component<Props, {}> {
+      public static childContextTypes = {
+        parentStore: PropTypes.object
+      };
+      private store: FormStore;
+      private onSubmit: IWrappedOnSubmit;
 
-      if (options.onSubmit) {
-        this.onSubmit = wrapOnSubmit(this.store, options.onSubmit);
+      constructor(props: Props) {
+        super(props);
+        this.store = new FormStore(options);
+
+        if (options.onSubmit) {
+          this.onSubmit = wrapOnSubmit(this.store, options.onSubmit);
+        }
+      }
+
+      public getChildContext() {
+        return { parentStore: this.store };
+      }
+
+      public render() {
+        return <WC {...this.props} form={this.store} onSubmit={this.onSubmit} />;
       }
     }
 
-    public getChildContext() {
-      return { parentStore: this.store };
-    }
-
-    public render() {
-      return <Component {...this.props} form={this.store} onSubmit={this.onSubmit} />;
-    }
+    return Form;
   };
 }

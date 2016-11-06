@@ -1,8 +1,11 @@
 import { form } from '../../../lib';
-import Form from './Form';
 import * as Promise from 'bluebird';
 
-export default form(Form, {
+export interface IFormProps {
+  title: string;
+}
+
+export const FormobxForm = form<IFormProps>({
   initialValues: {
     email: 'my@email.com',
     original: 'test',

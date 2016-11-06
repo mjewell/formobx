@@ -1,11 +1,11 @@
 import { FormStore, IFormStoreOptions } from '../stores';
 import { IMap, IStringMap } from '../types';
-import * as React from 'react';
+import { ComponentClass, FormEvent, StatelessComponent } from 'react';
 export interface IOnSubmit {
     (field: IStringMap): any;
 }
 export interface IWrappedOnSubmit {
-    (e: React.FormEvent<any>): void;
+    (e: FormEvent<any>): void;
 }
 export interface IWrappedFormProps {
     form: FormStore;
@@ -15,6 +15,4 @@ export interface IFormOptions extends IFormStoreOptions {
     onSubmit: IOnSubmit;
     initialValues?: IMap;
 }
-export interface IForm<Props> extends React.ComponentClass<Props> {
-}
-export declare function form<Props>(Component: React.ComponentClass<Props & IWrappedFormProps>, options: IFormOptions): IForm<Props>;
+export declare function form<Props>(options: IFormOptions): (WrappedComponent: ComponentClass<Props & IWrappedFormProps> | StatelessComponent<Props & IWrappedFormProps>) => ComponentClass<Props>;

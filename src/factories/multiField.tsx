@@ -1,5 +1,7 @@
 import { ArrayStore, FieldStore } from '../stores';
 import { IContext } from '../types';
+import { observer } from 'mobx-react';
+import { Component, ComponentClass, PropTypes, StatelessComponent } from 'react';
 import * as React from 'react';
 
 export interface IPassedThroughMultiFieldProps {
@@ -14,14 +16,14 @@ export interface IWrappedMultiFieldProps extends IPassedThroughMultiFieldProps {
   fields: IMultiFieldStores;
 }
 
-export interface IMultiFieldComponent<Props> extends React.ComponentClass<Props & IPassedThroughMultiFieldProps> { }
-
 export function multiField<Props>(
-  Component: React.ComponentClass<Props & IWrappedMultiFieldProps>
-): IMultiFieldComponent<Props & IPassedThroughMultiFieldProps> {
-  return class MultiField extends React.Component<Props & IPassedThroughMultiFieldProps, {}> {
+  WrappedComponent: ComponentClass<Props & IWrappedMultiFieldProps> | StatelessComponent<Props & IWrappedMultiFieldProps>
+): ComponentClass<Props & IPassedThroughMultiFieldProps> {
+  const WC = observer(WrappedComponent as ComponentClass<Props & IWrappedMultiFieldProps>);
+
+  class MultiField extends Component<Props & IPassedThroughMultiFieldProps, {}> {
     public static contextTypes = {
-      parentStore: React.PropTypes.object.isRequired
+      parentStore: PropTypes.object.isRequired
     };
     public context: IContext;
     private stores: IMultiFieldStores;
@@ -57,7 +59,9 @@ export function multiField<Props>(
     }
 
     public render() {
-      return <Component {...this.props} fields={this.stores} />;
+      return <WC {...this.props} fields={this.stores} />;
     }
-  };
+  }
+
+  return MultiField;
 }

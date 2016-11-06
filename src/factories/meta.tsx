@@ -1,25 +1,25 @@
 import { ParentStore } from '../stores';
 import { IContext } from '../types';
+import { observer } from 'mobx-react';
+import { Component, ComponentClass, PropTypes, StatelessComponent } from 'react';
 import * as React from 'react';
 
-export interface IPassedThroughMetaProps { }
-
-export interface IWrappedMetaProps extends IPassedThroughMetaProps {
+export interface IWrappedMetaProps {
   field: ParentStore;
 }
 
-export interface IMetaComponent<Props> extends React.ComponentClass<Props & IPassedThroughMetaProps> { }
-
 export function meta<Props>(
-  Component: React.ComponentClass<Props & IWrappedMetaProps>
-): IMetaComponent<Props & IPassedThroughMetaProps> {
-  return class Meta extends React.Component<Props & IPassedThroughMetaProps, {}> {
+  WrappedComponent: ComponentClass<Props & IWrappedMetaProps> | StatelessComponent<Props & IWrappedMetaProps>
+): ComponentClass<Props> {
+  const WC = observer(WrappedComponent as ComponentClass<Props & IWrappedMetaProps>);
+
+  class Meta extends Component<Props, {}> {
     public static contextTypes = {
-      parentStore: React.PropTypes.object.isRequired
+      parentStore: PropTypes.object.isRequired
     };
     public context: IContext;
 
-    constructor(props: Props & IPassedThroughMetaProps, context: IContext) {
+    constructor(props: Props, context: IContext) {
       super(props, context);
 
       if (!context.parentStore) {
@@ -28,7 +28,9 @@ export function meta<Props>(
     }
 
     public render() {
-      return <Component {...this.props} field={this.context.parentStore} />;
+      return <WC {...this.props} field={this.context.parentStore} />;
     }
-  };
+  }
+
+  return Meta;
 }

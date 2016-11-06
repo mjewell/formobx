@@ -1,5 +1,7 @@
 import { ArrayStore, FieldStore } from '../stores';
 import { IContext } from '../types';
+import { observer } from 'mobx-react';
+import { Component, ComponentClass, PropTypes, StatelessComponent } from 'react';
 import * as React from 'react';
 
 export interface IPassedThroughFieldProps {
@@ -10,14 +12,16 @@ export interface IWrappedFieldProps extends IPassedThroughFieldProps {
   field: FieldStore;
 }
 
-export interface IFieldComponent<Props> extends React.ComponentClass<Props & IPassedThroughFieldProps> { }
+// TODO: add prepublish build script
 
 export function field<Props>(
-  Component: React.ComponentClass<Props & IWrappedFieldProps> | string
-): IFieldComponent<Props & IPassedThroughFieldProps> {
-  return class Field extends React.Component<Props & IPassedThroughFieldProps, {}> {
+  WrappedComponent: ComponentClass<Props & IWrappedFieldProps> | StatelessComponent<Props & IWrappedFieldProps> | string
+): ComponentClass<Props & IPassedThroughFieldProps> {
+  const WC = typeof WrappedComponent === 'string' ? undefined : observer(WrappedComponent as ComponentClass<Props & IWrappedFieldProps>);
+
+  class Field extends Component<Props & IPassedThroughFieldProps, {}> {
     public static contextTypes = {
-      parentStore: React.PropTypes.object.isRequired
+      parentStore: PropTypes.object.isRequired
     };
     public context: IContext;
     private store: FieldStore;
@@ -58,10 +62,20 @@ export function field<Props>(
 
     public render() {
       // TODO: handle other string types
-      if (Component === 'input') {
-        return <input {...this.props} {...this.store.asProps} />;
+      if (typeof WrappedComponent === 'string') {
+        if (WrappedComponent === 'input') {
+          return <input {...this.props} {...this.store.asProps} />;
+        }
+        throw new Error('Unsupported string component type');
       }
-      return <Component {...this.props} field={this.store} />;
+
+      if (WC) {
+        return <WC {...this.props} field={this.store} />;
+      } else {
+        throw new Error('Somehow the component was not wrapped but was also not a string...');
+      }
     }
   }
+
+  return Field;
 }

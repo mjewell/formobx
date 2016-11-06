@@ -1,11 +1,11 @@
-import FormContainer from './FormContainer';
+import { Form } from './Form';
 import DevTools from 'mobx-react-devtools';
 import * as React from 'react';
 
 const App = () => {
   return (
     <div style={{ margin: 'auto', maxWidth: '900px' }}>
-      <FormContainer title='Demo' />
+      <Form title='Demo' />
       <DevTools />
     </div>
   );

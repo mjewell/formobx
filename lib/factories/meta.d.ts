@@ -1,10 +1,6 @@
 import { ParentStore } from '../stores';
-import * as React from 'react';
-export interface IPassedThroughMetaProps {
-}
-export interface IWrappedMetaProps extends IPassedThroughMetaProps {
+import { ComponentClass, StatelessComponent } from 'react';
+export interface IWrappedMetaProps {
     field: ParentStore;
 }
-export interface IMetaComponent<Props> extends React.ComponentClass<Props & IPassedThroughMetaProps> {
-}
-export declare function meta<Props>(Component: React.ComponentClass<Props & IWrappedMetaProps>): IMetaComponent<Props & IPassedThroughMetaProps>;
+export declare function meta<Props>(WrappedComponent: ComponentClass<Props & IWrappedMetaProps> | StatelessComponent<Props & IWrappedMetaProps>): ComponentClass<Props>;
