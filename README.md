@@ -4,63 +4,67 @@ A library for removing a lot of boilerplate from forms with Mobx. Inspired by
 [redux-form](https://github.com/erikras/redux-form) and following a similar API,
 but using [MobX](https://github.com/mobxjs/mobx) for state management.
 
-Work in progress - for up to date usage, look at the example projects.
+Work in progress - for full usage, look at the example projects.
 
 ## Usage:
 
 ```jsx
 // A basic input field component
-const MyField = observer(({ field, type, name }) => (
-  <div>
-    <label>{name}: </label>
-    <input
-      {...field.asProps}
-      type={type}
-    />
-  </div>
-));
-```
+import { field } from 'formobx';
 
-```jsx
-// a basic form component
-import { Field } from 'formobx';
+interface MyFieldProps {
+  type: string;
+}
 
-const MyForm = observer(({ form, onSubmit }) => (
-  <form onSubmit={onSubmit}>
-    // wrap your field component with a formobx Field
-    <Field name="email" type="text" component={MyField} />
-    <Field name="password" type="password" component={MyField} />
-    <button type="submit" disabled={form.submitting}>
-      Log In
-    </button>
-  </form>
-));
-```
-
-```javascript
-// wrap your form with formobx
-import { formobx } from 'formobx';
-
-const FormContainer = formobx(MyForm, {
-  onSubmit: makeLogInRequest
-});
-```
-
-```jsx
-// render the form container
-const App = () => (
-  <FormContainer />
+const MyField = field<MyFieldProps>(
+  ({ field, type, name }) => (
+    <div>
+      <label>{name}: </label>
+      <input
+        {...field.asProps}
+        type={type}
+      />
+    </div>
+  )
 );
 ```
 
-Each component wrapped with a `Field` will be passed a field object which contains
-the current value of the field, and any errors associated with it. Any other props
-passed to `Field` will be passed through to the wrapped component.
+```jsx
+// Make a formobx wrapper for your form
+import { form } from 'formobx';
 
-The form component wrapped with `formobx` will be passed a form object which
-contains all of the field objects from the fields rendered inside of it, as well
-as the submitting state of the form, and any errors associated with the form
-itself. If the `onSubmit` function returns a rejected promise, the errors from
-that promise will be attached to the associated fields.
+interface MyFormProps {
+  title: string;
+}
 
-For further info, see the example
+const MyFormWrapper = form<MyFormProps>({
+  onSubmit: makeLoginRequest
+})
+```
+
+```jsx
+// Wrap your form component with it
+const MyForm = MyFormWrapper(
+  ({ form, onSubmit, title }) => (
+    <form onSubmit={onSubmit}>
+      <h1>{title}</h1>
+      <MyField name="email" type="text" />
+      <MyField name="password" type="password" />
+      <button type="submit" disabled={form.submitting}>
+        Log In
+      </button>
+    </form>
+  )
+);
+```
+
+```jsx
+// render the form
+const App = () => (
+  <MyForm />
+);
+```
+
+Formobx uses the structure of your form to build a backing object. Arrays and
+complex objects are supported by using the `ArrayField` and `ObjectField`
+classes.
