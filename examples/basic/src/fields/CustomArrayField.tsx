@@ -1,15 +1,15 @@
-import { ObjectField, meta } from '../../../../lib';
+import { IWrappedMetaProps, ObjectField, meta } from '../../../../lib';
 import { SimpleField } from './SimpleField';
 import { observable } from 'mobx';
 import * as React from 'react';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 
-let id = 0;
-const arrayFields = observable<number>([]);
+class Field extends React.Component<{} & IWrappedMetaProps, {}> {
+  private id = 0;
+  private arrayFields = observable<number>([]);
 
-export const CustomArrayField = meta(
-  ({ field }) => {
-    const fields = arrayFields.map(f => {
+  public render() {
+    const fields = this.arrayFields.map(f => {
       return (
         <Row key={f}>
           <ObjectField>
@@ -17,7 +17,7 @@ export const CustomArrayField = meta(
               <SimpleField name='arrayField' type='text' />
             </Col>
             <Col xs={4} style={{ marginTop: '1.8em' }}>
-              <Button onClick={() => arrayFields.remove(f)}>Remove</Button>
+              <Button onClick={() => this.arrayFields.remove(f)}>Remove</Button>
             </Col>
           </ObjectField>
         </Row>
@@ -27,8 +27,10 @@ export const CustomArrayField = meta(
     return (
       <Grid>
         {fields}
-        <Button onClick={() => arrayFields.push(id++)}>Add Another</Button>
+        <Button onClick={() => this.arrayFields.push(this.id++)}>Add Another</Button>
       </Grid>
     );
   }
-);
+}
+
+export const CustomArrayField = meta(Field);

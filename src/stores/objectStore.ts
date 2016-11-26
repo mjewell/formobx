@@ -1,15 +1,9 @@
-import { IMap, IObjectErrors, isArrayErrors, isFieldErrors, isObjectErrors } from '../types';
-import { ArrayStore } from './arrayStore';
+import setErrorsFor from '../services/setErrorsFor';
+import setInitialValuesFor from '../services/setInitialValuesFor';
+import { IMap, IObjectErrors } from '../types';
 import { ChildStore, ParentStore } from './types';
 import * as keys from 'lodash/keys';
-import {
-  IObservableArray,
-  ObservableMap,
-  action,
-  asMap,
-  computed,
-  observable
-} from 'mobx';
+import { IObservableArray, ObservableMap, action, asMap, computed, observable } from 'mobx';
 const mapValues = require('lodash/fp/mapValues');
 
 const mapValuesToJS = mapValues((f: ChildStore) => f.value);
@@ -18,14 +12,10 @@ export class ObjectStore {
   public parent: ParentStore;
   @observable public fields: ObservableMap<ChildStore> = asMap<ChildStore>({});
   public errors: IObservableArray<string> = observable<string>([]);
-  protected initialValues: IMap;
-
-  constructor() {
-    this.setInitialValues();
-  }
+  protected initialValues: IMap = {};
 
   @computed
-  get value() {
+  get value(): IMap {
     return mapValuesToJS(this.fields.toJS());
   }
 
@@ -40,7 +30,7 @@ export class ObjectStore {
     }
 
     this.fields.set(name, field);
-    field.setInitialValues(this.initialValues[name]);
+    setInitialValuesFor(field, this.initialValues[name]);
     field.parent = this;
   }
 
@@ -50,13 +40,11 @@ export class ObjectStore {
   }
 
   @action
-  public setInitialValues(initialValues?: any) {
-    if (!initialValues) {
-      this.initialValues = {};
-      return;
-    }
-    this.initialValues = initialValues;
-    this.fields.keys().forEach(key => this.fields.get(key).setInitialValues(initialValues[key]));
+  public setInitialValues(initialValues?: IMap) {
+    this.initialValues = initialValues || {};
+    this.fields.keys().forEach(key => {
+      setInitialValuesFor(this.fields.get(key), this.initialValues[key]);
+    });
   }
 
   @action
@@ -67,26 +55,7 @@ export class ObjectStore {
 
   @action
   public setErrors(errors: IObjectErrors) {
-    keys(errors).forEach(key => {
-      const field = this.fields.get(key);
-      const error = errors[key];
-      if (field) {
-        if (field instanceof ArrayStore) {
-          if (isArrayErrors(error)) {
-            field.setErrors(error);
-          }
-        } else if (field instanceof ObjectStore) {
-          if (isObjectErrors(error)) {
-            field.setErrors(error);
-          }
-        } else {
-          if (isFieldErrors(error)) {
-            field.setErrors(error);
-          }
-        }
-      }
-    });
-
+    keys(errors).forEach(key => setErrorsFor(this.fields.get(key), errors[key]));
     this.errors.replace(errors._base || []);
   }
 }

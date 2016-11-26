@@ -19,12 +19,8 @@ export class FieldStore {
   }
 
   @action
-  public setInitialValues(initialValue: any) {
-    if (!initialValue) {
-      this.setValue('');
-      return;
-    }
-    this.setValue(initialValue);
+  public setInitialValues(initialValue?: any) {
+    this.setValue(initialValue || '');
   }
 
   @action

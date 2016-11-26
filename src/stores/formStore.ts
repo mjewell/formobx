@@ -11,7 +11,7 @@ export class FormStore extends ObjectStore {
 
   constructor(options: IFormStoreOptions) {
     super();
-    this.initialValues = options.initialValues || {};
+    this.setInitialValues(options.initialValues);
   }
 
   @action

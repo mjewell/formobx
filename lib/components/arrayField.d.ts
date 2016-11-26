@@ -1,5 +1,8 @@
+import { ArrayStore } from '../stores';
 import { IContext } from '../types';
-import { INodeFieldProps, NodeField } from './nodeField';
-export declare class ArrayField extends NodeField {
-    constructor(props: INodeFieldProps, context: IContext);
+import { IFieldProps } from './field';
+import { WrapperField } from './wrapperField';
+export declare class ArrayField extends WrapperField<{}> {
+    protected store: ArrayStore;
+    constructor(props: IFieldProps, context: IContext);
 }

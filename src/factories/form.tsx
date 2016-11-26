@@ -1,7 +1,7 @@
 import { FormStore, IFormStoreOptions } from '../stores';
 import { IMap, IStringMap } from '../types';
 import { observer } from 'mobx-react';
-import { Component, ComponentClass, FormEvent, PropTypes, StatelessComponent } from 'react';
+import { Component, ComponentClass, FormEvent, StatelessComponent } from 'react';
 import * as React from 'react';
 
 export interface IOnSubmit {
@@ -35,14 +35,15 @@ function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
 
 export function form<Props>(options: IFormOptions) {
   type ReactComponent = ComponentClass<Props & IWrappedFormProps> | StatelessComponent<Props & IWrappedFormProps>;
-  return (WrappedComponent: ReactComponent): ComponentClass<Props> => {
-    const WC = observer(WrappedComponent as ComponentClass<Props & IWrappedFormProps>);
 
-    class Form extends Component<Props, {}> {
+  return (FormComponent: ReactComponent): ComponentClass<Props> => {
+    const WrappedComponent = observer(FormComponent as ComponentClass<Props & IWrappedFormProps>);
+
+    class FormobxForm extends Component<Props, {}> {
       public static childContextTypes = {
-        parentStore: PropTypes.object
+        parentStore: React.PropTypes.object
       };
-      private store: FormStore;
+      protected store: FormStore;
       private onSubmit: IWrappedOnSubmit;
 
       constructor(props: Props) {
@@ -59,10 +60,16 @@ export function form<Props>(options: IFormOptions) {
       }
 
       public render() {
-        return <WC {...this.props} form={this.store} onSubmit={this.onSubmit} />;
+        return (
+          <WrappedComponent
+            {...this.props}
+            form={this.store}
+            onSubmit={this.onSubmit}
+            />
+        );
       }
     }
 
-    return Form;
+    return FormobxForm;
   };
 }

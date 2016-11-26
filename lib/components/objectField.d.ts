@@ -1,5 +1,8 @@
+import { ObjectStore } from '../stores';
 import { IContext } from '../types';
-import { INodeFieldProps, NodeField } from './nodeField';
-export declare class ObjectField extends NodeField {
-    constructor(props: INodeFieldProps, context: IContext);
+import { IFieldProps } from './field';
+import { WrapperField } from './wrapperField';
+export declare class ObjectField extends WrapperField<{}> {
+    protected store: ObjectStore;
+    constructor(props: IFieldProps, context: IContext);
 }

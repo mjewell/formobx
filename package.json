@@ -51,7 +51,7 @@
     "tslint-eslint-rules": "^1.5.0",
     "tslint-microsoft-contrib": "^2.0.12",
     "tslint-react": "^1.0.0",
-    "typescript": "^2.1.0-dev.20160923",
+    "typescript": "^2.2.0-dev.20161127",
     "webpack": "^1.13.1",
     "webpack-dashboard": "^0.2.0",
     "webpack-dev-server": "^1.14.1"

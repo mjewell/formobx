@@ -9,7 +9,7 @@ export declare class FieldStore {
         onChange: (e: React.FormEvent<any>) => void;
         value: any;
     };
-    setInitialValues(initialValue: any): void;
+    setInitialValues(initialValue?: any): void;
     setValue(val: any): void;
     clearErrors(): void;
     setErrors(errors: string[]): void;

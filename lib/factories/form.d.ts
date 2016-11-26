@@ -15,4 +15,4 @@ export interface IFormOptions extends IFormStoreOptions {
     onSubmit: IOnSubmit;
     initialValues?: IMap;
 }
-export declare function form<Props>(options: IFormOptions): (WrappedComponent: ComponentClass<Props & IWrappedFormProps> | StatelessComponent<Props & IWrappedFormProps>) => ComponentClass<Props>;
+export declare function form<Props>(options: IFormOptions): (FormComponent: ComponentClass<Props & IWrappedFormProps> | StatelessComponent<Props & IWrappedFormProps>) => ComponentClass<Props>;

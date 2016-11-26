@@ -6,11 +6,10 @@ export declare class ObjectStore {
     fields: ObservableMap<ChildStore>;
     errors: IObservableArray<string>;
     protected initialValues: IMap;
-    constructor();
-    readonly value: any;
+    readonly value: IMap;
     registerField(name: string, field: ChildStore): void;
     unregisterField(name: string): void;
-    setInitialValues(initialValues?: any): void;
+    setInitialValues(initialValues?: IMap): void;
     clearErrors(): void;
     setErrors(errors: IObjectErrors): void;
 }

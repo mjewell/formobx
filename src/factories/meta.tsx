@@ -9,11 +9,11 @@ export interface IWrappedMetaProps {
 }
 
 export function meta<Props>(
-  WrappedComponent: ComponentClass<Props & IWrappedMetaProps> | StatelessComponent<Props & IWrappedMetaProps>
+  MetaComponent: ComponentClass<Props & IWrappedMetaProps> | StatelessComponent<Props & IWrappedMetaProps>
 ): ComponentClass<Props> {
-  const WC = observer(WrappedComponent as ComponentClass<Props & IWrappedMetaProps>);
+  const WrappedComponent = observer(MetaComponent as ComponentClass<Props & IWrappedMetaProps>);
 
-  class Meta extends Component<Props, {}> {
+  class FormobxMeta extends Component<Props, {}> {
     public static contextTypes = {
       parentStore: PropTypes.object.isRequired
     };
@@ -23,14 +23,14 @@ export function meta<Props>(
       super(props, context);
 
       if (!context.parentStore) {
-        throw new Error('Metas must be used inside a component decorated with formobx');
+        throw new Error('Formobx Fields must be used inside a component decorated with formobx');
       }
     }
 
     public render() {
-      return <WC {...this.props} field={this.context.parentStore} />;
+      return <WrappedComponent {...this.props} field={this.context.parentStore} />;
     }
   }
 
-  return Meta;
+  return FormobxMeta;
 }

@@ -1,12 +1,6 @@
-import { FieldStore } from '../stores';
+import { IMultiFieldProps, IMultiFieldStores } from '../components';
 import { ComponentClass, StatelessComponent } from 'react';
-export interface IPassedThroughMultiFieldProps {
-    names?: string[];
-}
-export interface IMultiFieldStores {
-    [name: string]: FieldStore;
-}
-export interface IWrappedMultiFieldProps extends IPassedThroughMultiFieldProps {
+export interface IWrappedMultiFieldProps extends IMultiFieldProps {
     fields: IMultiFieldStores;
 }
-export declare function multiField<Props>(WrappedComponent: ComponentClass<Props & IWrappedMultiFieldProps> | StatelessComponent<Props & IWrappedMultiFieldProps>): ComponentClass<Props & IPassedThroughMultiFieldProps>;
+export declare function multiField<Props>(MultiFieldComponent: (ComponentClass<Props & IWrappedMultiFieldProps> | StatelessComponent<Props & IWrappedMultiFieldProps>)): ComponentClass<Props & IMultiFieldProps>;

@@ -6,11 +6,10 @@ export declare class ArrayStore {
     fields: IObservableArray<ChildStore>;
     errors: IObservableArray<string>;
     protected initialValues: any[];
-    constructor();
-    readonly value: any;
+    readonly value: any[];
     registerField(field: ChildStore): void;
     unregisterField(field: ChildStore): void;
-    setInitialValues(initialValues?: any): void;
+    setInitialValues(initialValues?: any[]): void;
     clearErrors(): void;
     setErrors(errors: IArrayErrors): void;
 }
