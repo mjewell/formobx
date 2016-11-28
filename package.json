@@ -6,7 +6,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "lint": "tslint 'src/*.ts{,x}'; exit 0"
+    "lint": "tslint 'src/*.ts{,x}'; exit 0",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
