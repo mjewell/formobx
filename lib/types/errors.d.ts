@@ -1,4 +1,3 @@
-/// <reference types="core-js" />
 export declare type IErrorValues = string[] | IErrors;
 export interface IObjectErrors {
     _base: string[];

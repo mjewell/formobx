@@ -5,11 +5,11 @@ import { Component, ComponentClass, FormEvent, PropTypes, StatelessComponent } f
 import * as React from 'react';
 
 export interface IOnSubmit {
-  (field: IStringMap): any;
+  (form: IStringMap, ...otherArgs: any[]): any;
 }
 
 export interface IWrappedOnSubmit {
-  (e: FormEvent<any>): void;
+  (e: FormEvent<any>, ...otherArgs: any[]): void;
 }
 
 export interface IWrappedFormProps {
@@ -23,11 +23,11 @@ export interface IFormOptions extends IFormStoreOptions {
 }
 
 function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
-  return (e: FormEvent<any>) => {
+  return (e: FormEvent<any>, ...otherArgs: any[]) => {
     e.preventDefault();
     store.setSubmitting(true);
     store.clearErrors();
-    Promise.resolve(callback(store.value))
+    Promise.resolve(callback(store.value, ...otherArgs))
       .catch(result => store.setErrors(result))
       .then(() => store.setSubmitting(false));
   };
