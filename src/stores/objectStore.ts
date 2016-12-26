@@ -1,6 +1,7 @@
 import setErrorsFor from '../services/setErrorsFor';
 import setInitialValuesFor from '../services/setInitialValuesFor';
 import { IMap, IObjectErrors } from '../types';
+import { FieldErrors } from './fieldErrors';
 import { ChildStore, ParentStore } from './types';
 import * as keys from 'lodash/keys';
 import { IObservableArray, ObservableMap, action, asMap, computed, observable } from 'mobx';
@@ -11,8 +12,8 @@ const mapValuesToJS = mapValues((f: ChildStore) => f.value);
 export class ObjectStore {
   public parent: ParentStore;
   @observable public fields: ObservableMap<ChildStore> = asMap<ChildStore>({});
-  public errors: IObservableArray<string> = observable<string>([]);
   protected initialValues: IMap = {};
+  private fieldErrors = new FieldErrors();
 
   @computed
   get value(): IMap {
@@ -26,7 +27,7 @@ export class ObjectStore {
     }
 
     if (name === '_base') {
-      throw new Error("Field cannot have reserved name '_base'");
+      throw new Error('Field cannot have reserved name \'_base\'');
     }
 
     this.fields.set(name, field);
@@ -47,15 +48,20 @@ export class ObjectStore {
     });
   }
 
+  @computed
+  get errors(): IObservableArray<string> {
+    return this.fieldErrors.errors;
+  }
+
   @action
   public clearErrors() {
+    this.fieldErrors.clearErrors();
     this.fields.values().forEach(field => field.clearErrors());
-    this.errors.clear();
   }
 
   @action
   public setErrors(errors: IObjectErrors) {
+    this.fieldErrors.setErrors(errors._base);
     keys(errors).forEach(key => setErrorsFor(this.fields.get(key), errors[key]));
-    this.errors.replace(errors._base || []);
   }
 }

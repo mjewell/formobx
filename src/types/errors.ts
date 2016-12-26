@@ -1,4 +1,4 @@
-export type IFieldErrors = string[];
+export type IFieldErrors = string[] | undefined;
 
 export interface IObjectErrors {
   _base: IFieldErrors;

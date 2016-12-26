@@ -1,14 +1,15 @@
 import setErrorsFor from '../services/setErrorsFor';
 import setInitialValuesFor from '../services/setInitialValuesFor';
 import { IArrayErrors } from '../types';
+import { FieldErrors } from './fieldErrors';
 import { ChildStore, ParentStore } from './types';
 import { IObservableArray, action, computed, observable } from 'mobx';
 
 export class ArrayStore {
   public parent: ParentStore;
   public fields: IObservableArray<ChildStore> = observable<ChildStore>([]);
-  public errors: IObservableArray<string> = observable<string>([]);
   protected initialValues: any[] = [];
+  private fieldErrors = new FieldErrors();
 
   @computed
   get value(): any[] {
@@ -38,15 +39,20 @@ export class ArrayStore {
     });
   }
 
+  @computed
+  get errors(): IObservableArray<string> {
+    return this.fieldErrors.errors;
+  }
+
   @action
   public clearErrors() {
+    this.fieldErrors.clearErrors();
     this.fields.forEach(field => field.clearErrors());
-    this.errors.clear();
   }
 
   @action
   public setErrors(errors: IArrayErrors) {
-    errors.forEach((error, i) => setErrorsFor(this.fields[i], error));
-    this.errors.replace(errors._base || []);
+    this.fieldErrors.setErrors(errors._base);
+    errors.forEach((error, i) => setErrorsFor(this.fields[i], errors));
   }
 }

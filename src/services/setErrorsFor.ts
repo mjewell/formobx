@@ -1,19 +1,19 @@
 import { ArrayStore, ChildStore, ObjectStore } from '../stores';
 import { IErrorValues, isArrayErrors, isFieldErrors, isObjectErrors } from '../types';
 
-export default function setErrorsFor(field: ChildStore, error: IErrorValues) {
+export default function setErrorsFor(field: ChildStore, errors: IErrorValues) {
   if (field) {
     if (field instanceof ArrayStore) {
-      if (isArrayErrors(error)) {
-        field.setErrors(error);
+      if (isArrayErrors(errors)) {
+        field.setErrors(errors);
       }
     } else if (field instanceof ObjectStore) {
-      if (isObjectErrors(error)) {
-        field.setErrors(error);
+      if (isObjectErrors(errors)) {
+        field.setErrors(errors);
       }
     } else {
-      if (isFieldErrors(error)) {
-        field.setErrors(error);
+      if (isFieldErrors(errors)) {
+        field.setErrors(errors);
       }
     }
   }
