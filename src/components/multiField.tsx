@@ -18,7 +18,7 @@ export abstract class MultiField<Props> extends ChildField<Props & IMultiFieldPr
 
     (this.props.names || []).forEach(name => {
       const field = new FieldStore();
-      this.stores[name] = new FieldStore();
+      this.stores[name] = field;
       this.fields.push({ name, field });
     });
   }
