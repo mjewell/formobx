@@ -7,7 +7,7 @@ export interface IFieldProps {
 }
 
 export abstract class Field<Props> extends ChildField<Props & IFieldProps> {
-  protected store: FieldStore;
+  public store: FieldStore;
 
   constructor(props: Props & IFieldProps, context: IContext) {
     super(props, context);

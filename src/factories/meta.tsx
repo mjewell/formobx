@@ -8,8 +8,12 @@ export interface IWrappedMetaProps {
   field: ParentStore;
 }
 
+// TODO: create component for meta and form that they can extend and remove everything except render from here
 export function meta<Props>(
-  MetaComponent: ComponentClass<Props & IWrappedMetaProps> | StatelessComponent<Props & IWrappedMetaProps>
+  MetaComponent: (
+    ComponentClass<Props & IWrappedMetaProps> |
+    StatelessComponent<Props & IWrappedMetaProps>
+  )
 ): ComponentClass<Props> {
   const WrappedComponent = observer(MetaComponent as ComponentClass<Props & IWrappedMetaProps>);
 

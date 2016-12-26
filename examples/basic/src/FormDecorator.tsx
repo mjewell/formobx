@@ -24,7 +24,9 @@ export const FormobxForm = form<IFormProps>({
         nestedFieldA: ['and inside the object too']
       },
       array: [ // TODO: support base errors here
-        { arrayField: ['array errors too'] }
+        [
+          { arrayField: ['array errors too'] }
+        ]
       ]
     };
   })

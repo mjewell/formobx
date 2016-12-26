@@ -8,8 +8,6 @@ export interface IWrappedFieldProps extends IFieldProps {
   field: FieldStore;
 }
 
-// TODO: add prepublish build script
-
 export function field<Props>(
   FieldComponent: (
     ComponentClass<Props & IWrappedFieldProps> |
@@ -17,24 +15,22 @@ export function field<Props>(
     string
   )
 ): ComponentClass<Props & IFieldProps> {
-  let WrappedComponent: ComponentClass<Props & IWrappedFieldProps> | undefined;
+  let render: () => JSX.Element;
+
   if (typeof FieldComponent !== 'string') {
-    WrappedComponent = observer(FieldComponent as ComponentClass<Props & IWrappedFieldProps>);
+    const WrappedComponent = observer(FieldComponent as ComponentClass<Props & IWrappedFieldProps>);
+    render = function () { return <WrappedComponent {...this.props} field={this.store} />; };
+  } else if (FieldComponent === 'input') {
+    render = function () { return <input {...this.props} {...this.store.asProps} />; };
+  } else {
+    throw new Error(`Unsupported string component type '${FieldComponent}'`);
   }
 
-  class FormobxField extends Field<Props> {
+  return class FormobxField extends Field<Props> {
+    private boundRender = render.bind(this);
+
     public render() {
-      // TODO: handle other string types
-      if (!WrappedComponent) {
-        if (FieldComponent === 'input') {
-          return <input {...this.props} {...this.store.asProps} />;
-        }
-        throw new Error('Unsupported string component type');
-      }
-
-      return <WrappedComponent {...this.props} field={this.store} />;
+      return this.boundRender();
     }
-  }
-
-  return FormobxField;
+  };
 }

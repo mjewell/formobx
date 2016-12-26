@@ -18,7 +18,7 @@ export abstract class ChildField<Props> extends React.Component<Props, {}> {
     super(props, context);
 
     if (!context.parentStore) {
-      throw new Error('Formobx Fields must be used inside a component decorated with formobx');
+      throw new Error('Formobx Fields must be used inside a Formobx form');
     }
   }
 

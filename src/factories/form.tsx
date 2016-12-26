@@ -8,6 +8,7 @@ export interface IOnSubmit {
   (form: IStringMap, ...otherArgs: any[]): any;
 }
 
+// TODO: should this return the promise so you can do stuff with it after errors are set? - probably
 export interface IWrappedOnSubmit {
   (e: FormEvent<any>, ...otherArgs: any[]): void;
 }
@@ -39,7 +40,7 @@ export function form<Props>(options: IFormOptions) {
   return (FormComponent: ReactComponent): ComponentClass<Props> => {
     const WrappedComponent = observer(FormComponent as ComponentClass<Props & IWrappedFormProps>);
 
-    class FormobxForm extends Component<Props, {}> {
+    return class FormobxForm extends Component<Props, {}> {
       public static childContextTypes = {
         parentStore: React.PropTypes.object
       };
@@ -68,8 +69,6 @@ export function form<Props>(options: IFormOptions) {
             />
         );
       }
-    }
-
-    return FormobxForm;
+    };
   };
 }

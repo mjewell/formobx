@@ -53,6 +53,6 @@ export class ArrayStore {
   @action
   public setErrors(errors: IArrayErrors) {
     this.fieldErrors.setErrors(errors._base);
-    errors.forEach((error, i) => setErrorsFor(this.fields[i], errors));
+    errors.forEach((error, i) => setErrorsFor(this.fields[i], errors[i]));
   }
 }
