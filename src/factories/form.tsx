@@ -1,7 +1,7 @@
 import { FormStore, IFormStoreOptions } from '../stores';
 import { IMap, IStringMap } from '../types';
 import { observer } from 'mobx-react';
-import { Component, ComponentClass, FormEvent, StatelessComponent } from 'react';
+import { Component, ComponentClass, FormEvent, PropTypes, StatelessComponent } from 'react';
 import * as React from 'react';
 
 export interface IOnSubmit {
@@ -34,6 +34,7 @@ function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
   };
 }
 
+// TODO: support initial values as a func receiving props
 export function form<Props>(options: IFormOptions) {
   type ReactComponent = ComponentClass<Props & IWrappedFormProps> | StatelessComponent<Props & IWrappedFormProps>;
 
@@ -42,7 +43,7 @@ export function form<Props>(options: IFormOptions) {
 
     return class FormobxForm extends Component<Props, {}> {
       public static childContextTypes = {
-        parentStore: React.PropTypes.object
+        parentStore: PropTypes.object
       };
       protected store: FormStore;
       private onSubmit: IWrappedOnSubmit;

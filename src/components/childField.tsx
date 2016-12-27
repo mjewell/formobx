@@ -1,26 +1,13 @@
 import { ArrayStore, ChildStore } from '../stores';
-import { IContext } from '../types';
-import * as React from 'react';
+import { BaseField } from './baseField';
 
 export interface IFieldData {
   name?: string;
   field: ChildStore;
 }
 
-export abstract class ChildField<Props> extends React.Component<Props, {}> {
-  public static contextTypes = {
-    parentStore: React.PropTypes.object.isRequired
-  };
-  public context: IContext;
+export abstract class ChildField<Props> extends BaseField<Props> {
   protected fields: IFieldData[] = [];
-
-  constructor(props: Props, context: IContext) {
-    super(props, context);
-
-    if (!context.parentStore) {
-      throw new Error('Formobx Fields must be used inside a Formobx form');
-    }
-  }
 
   public componentDidMount() {
     const parentStore = this.context.parentStore;
@@ -58,6 +45,4 @@ export abstract class ChildField<Props> extends React.Component<Props, {}> {
       });
     }
   }
-
-  public abstract render(): JSX.Element;
-}
+};
