@@ -5,7 +5,7 @@ import * as React from 'react';
 const App = () => {
   return (
     <div style={{ margin: 'auto', maxWidth: '900px' }}>
-      <Form title='Demo' />
+      <Form title='Demo' initialPasswordValue='password test' />
       <DevTools />
     </div>
   );

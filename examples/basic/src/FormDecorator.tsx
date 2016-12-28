@@ -3,14 +3,16 @@ import * as Promise from 'bluebird';
 
 export interface IFormProps {
   title: string;
+  initialPasswordValue: string;
 }
 
 export const FormobxForm = form<IFormProps>({
-  initialValues: {
+  initialValues: props => ({
     email: 'my@email.com',
+    password: props.initialPasswordValue,
     original: 'test',
     upcased: 'TEST'
-  },
+  }),
   onSubmit: () => Promise.delay(500).then(() => {
     throw {
       _base: ['the form has some issues'],

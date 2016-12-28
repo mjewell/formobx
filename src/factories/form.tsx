@@ -1,4 +1,4 @@
-import { FormStore, IFormStoreOptions } from '../stores';
+import { FormStore } from '../stores';
 import { IMap, IStringMap } from '../types';
 import { observer } from 'mobx-react';
 import { Component, ComponentClass, FormEvent, PropTypes, StatelessComponent } from 'react';
@@ -18,10 +18,10 @@ export interface IWrappedFormProps {
   onSubmit: IWrappedOnSubmit;
 }
 
-export interface IFormOptions extends IFormStoreOptions {
+export interface IFormOptions<Props> {
+  initialValues: IMap | ((props: Props) => IMap) | undefined;
   onSubmit: IOnSubmit;
-  initialValues?: IMap;
-}
+};
 
 function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
   return (e: FormEvent<any>, ...otherArgs: any[]) => {
@@ -34,12 +34,12 @@ function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
   };
 }
 
-// TODO: support initial values as a func receiving props
-export function form<Props>(options: IFormOptions) {
-  type ReactComponent = ComponentClass<Props & IWrappedFormProps> | StatelessComponent<Props & IWrappedFormProps>;
+export function form<Props>(options: IFormOptions<Props>) {
+  type EnhancedProps = Props & IWrappedFormProps;
+  type ReactComponent = ComponentClass<EnhancedProps> | StatelessComponent<EnhancedProps>;
 
   return (FormComponent: ReactComponent): ComponentClass<Props> => {
-    const WrappedComponent = observer(FormComponent as ComponentClass<Props & IWrappedFormProps>);
+    const WrappedComponent = observer(FormComponent as ComponentClass<EnhancedProps>);
 
     return class FormobxForm extends Component<Props, {}> {
       public static childContextTypes = {
@@ -50,10 +50,17 @@ export function form<Props>(options: IFormOptions) {
 
       constructor(props: Props) {
         super(props);
-        this.store = new FormStore(options);
 
-        if (options.onSubmit) {
-          this.onSubmit = wrapOnSubmit(this.store, options.onSubmit);
+        const componentOptions = { ...options };
+
+        if (typeof componentOptions.initialValues === 'function') {
+          componentOptions.initialValues = componentOptions.initialValues(props);
+        }
+
+        this.store = new FormStore(componentOptions);
+
+        if (componentOptions.onSubmit) {
+          this.onSubmit = wrapOnSubmit(this.store, componentOptions.onSubmit);
         }
       }
 
