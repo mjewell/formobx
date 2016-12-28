@@ -1,3 +1,5 @@
+import { IFieldErrors } from '../types';
+import { FieldErrors } from './fieldErrors';
 import { ParentStore } from './types';
 import { IObservableArray, action, computed, observable } from 'mobx';
 import * as React from 'react';
@@ -5,7 +7,7 @@ import * as React from 'react';
 export class FieldStore {
   public parent: ParentStore;
   @observable public value: any = '';
-  public errors: IObservableArray<string> = observable<string>([]);
+  private fieldErrors = new FieldErrors();
 
   @computed
   get asProps() {
@@ -19,12 +21,8 @@ export class FieldStore {
   }
 
   @action
-  public setInitialValues(initialValue: any) {
-    if (!initialValue) {
-      this.setValue('');
-      return;
-    }
-    this.setValue(initialValue);
+  public setInitialValues(initialValue?: any) {
+    this.setValue(initialValue || '');
   }
 
   @action
@@ -32,13 +30,19 @@ export class FieldStore {
     this.value = val;
   }
 
-  @action
-  public clearErrors() {
-    this.errors.clear();
+  // TODO: see if we can use delegation to remove these 3 methods
+  @computed
+  get errors(): IObservableArray<string> {
+    return this.fieldErrors.errors;
   }
 
   @action
-  public setErrors(errors: string[]) {
-    this.errors.replace(errors);
+  public clearErrors() {
+    this.fieldErrors.clearErrors();
+  }
+
+  @action
+  public setErrors(errors: IFieldErrors) {
+    this.fieldErrors.setErrors(errors);
   }
 }

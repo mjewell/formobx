@@ -38,8 +38,14 @@ export const Form = FormobxForm(
 
       <Panel header='Arrays'>
         <ArrayField name='array'>
-          <BaseErrors />
-          <CustomArrayField />
+          <ArrayField>
+            <BaseErrors />
+            <CustomArrayField />
+          </ArrayField>
+          <ArrayField>
+            <BaseErrors />
+            <CustomArrayField />
+          </ArrayField>
         </ArrayField>
       </Panel>
 

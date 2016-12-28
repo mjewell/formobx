@@ -1,4 +1,4 @@
-import { FormStore, IFormStoreOptions } from '../stores';
+import { FormStore } from '../stores';
 import { IMap, IStringMap } from '../types';
 import { observer } from 'mobx-react';
 import { Component, ComponentClass, FormEvent, PropTypes, StatelessComponent } from 'react';
@@ -8,6 +8,7 @@ export interface IOnSubmit {
   (form: IStringMap, ...otherArgs: any[]): any;
 }
 
+// TODO: should this return the promise so you can do stuff with it after errors are set? - probably
 export interface IWrappedOnSubmit {
   (e: FormEvent<any>, ...otherArgs: any[]): void;
 }
@@ -17,10 +18,10 @@ export interface IWrappedFormProps {
   onSubmit: IWrappedOnSubmit;
 }
 
-export interface IFormOptions extends IFormStoreOptions {
+export interface IFormOptions<Props> {
+  initialValues: IMap | ((props: Props) => IMap) | undefined;
   onSubmit: IOnSubmit;
-  initialValues?: IMap;
-}
+};
 
 function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
   return (e: FormEvent<any>, ...otherArgs: any[]) => {
@@ -33,24 +34,33 @@ function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
   };
 }
 
-export function form<Props>(options: IFormOptions) {
-  type ReactComponent = ComponentClass<Props & IWrappedFormProps> | StatelessComponent<Props & IWrappedFormProps>;
-  return (WrappedComponent: ReactComponent): ComponentClass<Props> => {
-    const WC = observer(WrappedComponent as ComponentClass<Props & IWrappedFormProps>);
+export function form<Props>(options: IFormOptions<Props>) {
+  type EnhancedProps = Props & IWrappedFormProps;
+  type ReactComponent = ComponentClass<EnhancedProps> | StatelessComponent<EnhancedProps>;
 
-    class Form extends Component<Props, {}> {
+  return (FormComponent: ReactComponent): ComponentClass<Props> => {
+    const WrappedComponent = observer(FormComponent as ComponentClass<EnhancedProps>);
+
+    return class FormobxForm extends Component<Props, {}> {
       public static childContextTypes = {
         parentStore: PropTypes.object
       };
-      private store: FormStore;
+      protected store: FormStore;
       private onSubmit: IWrappedOnSubmit;
 
       constructor(props: Props) {
         super(props);
-        this.store = new FormStore(options);
 
-        if (options.onSubmit) {
-          this.onSubmit = wrapOnSubmit(this.store, options.onSubmit);
+        const componentOptions = { ...options };
+
+        if (typeof componentOptions.initialValues === 'function') {
+          componentOptions.initialValues = componentOptions.initialValues(props);
+        }
+
+        this.store = new FormStore(componentOptions);
+
+        if (componentOptions.onSubmit) {
+          this.onSubmit = wrapOnSubmit(this.store, componentOptions.onSubmit);
         }
       }
 
@@ -59,10 +69,14 @@ export function form<Props>(options: IFormOptions) {
       }
 
       public render() {
-        return <WC {...this.props} form={this.store} onSubmit={this.onSubmit} />;
+        return (
+          <WrappedComponent
+            {...this.props}
+            form={this.store}
+            onSubmit={this.onSubmit}
+            />
+        );
       }
-    }
-
-    return Form;
+    };
   };
 }

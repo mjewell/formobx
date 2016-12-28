@@ -61,7 +61,7 @@ const MyForm = MyFormWrapper(
 ```jsx
 // render the form
 const App = () => (
-  <MyForm />
+  <MyForm title='Hello Formobx' />
 );
 ```
 

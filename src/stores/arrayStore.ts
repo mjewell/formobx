@@ -1,27 +1,28 @@
-import { IArrayErrors, isArrayErrors, isFieldErrors, isObjectErrors } from '../types';
-import { ObjectStore } from './objectStore';
+import setErrorsFor from '../services/setErrorsFor';
+import setInitialValuesFor from '../services/setInitialValuesFor';
+import { IArrayErrors } from '../types';
+import { FieldErrors } from './fieldErrors';
 import { ChildStore, ParentStore } from './types';
 import { IObservableArray, action, computed, observable } from 'mobx';
 
 export class ArrayStore {
   public parent: ParentStore;
   public fields: IObservableArray<ChildStore> = observable<ChildStore>([]);
-  public errors: IObservableArray<string> = observable<string>([]);
-  protected initialValues: any[];
-
-  constructor() {
-    this.setInitialValues();
-  }
+  protected initialValues: any[] = [];
+  private fieldErrors = new FieldErrors();
 
   @computed
-  get value(): any {
+  get value(): any[] {
     return this.fields.map(field => field.value);
   }
 
+  // TODO: maybe add a key or something for faster removal
   @action
   public registerField(field: ChildStore) {
     this.fields.push(field);
-    field.setInitialValues(this.initialValues[this.fields.length - 1]);
+    // TODO: should these be cleared as you go? if you add one, delete it, and add another, should that have the value set?
+    // TODO: should you be able to say for all, instead of by index
+    setInitialValuesFor(field, this.initialValues[this.fields.length - 1]);
     field.parent = this;
   }
 
@@ -31,42 +32,27 @@ export class ArrayStore {
   }
 
   @action
-  public setInitialValues(initialValues?: any) {
-    if (!initialValues) {
-      this.initialValues = [];
-      return;
-    }
-    this.initialValues = initialValues;
-    this.fields.forEach((field, i) => field.setInitialValues(initialValues[i]));
+  public setInitialValues(initialValues?: any[]) {
+    this.initialValues = initialValues || [];
+    this.fields.forEach((field, i) => {
+      setInitialValuesFor(field, this.initialValues[i]);
+    });
+  }
+
+  @computed
+  get errors(): IObservableArray<string> {
+    return this.fieldErrors.errors;
   }
 
   @action
   public clearErrors() {
+    this.fieldErrors.clearErrors();
     this.fields.forEach(field => field.clearErrors());
-    this.errors.clear();
   }
 
   @action
   public setErrors(errors: IArrayErrors) {
-    errors.forEach((error, i) => {
-      const field = this.fields[i];
-      if (field) {
-        if (field instanceof ArrayStore) {
-          if (isArrayErrors(error)) {
-            field.setErrors(error);
-          }
-        } else if (field instanceof ObjectStore) {
-          if (isObjectErrors(error)) {
-            field.setErrors(error);
-          }
-        } else {
-          if (isFieldErrors(error)) {
-            field.setErrors(error);
-          }
-        }
-      }
-    });
-
-    this.errors.replace(errors._base || []);
+    this.fieldErrors.setErrors(errors._base);
+    errors.forEach((error, i) => setErrorsFor(this.fields[i], errors[i]));
   }
 }

@@ -2,7 +2,7 @@ export * from './errors';
 export * from './context';
 
 export interface IStringMap {
-  [s: string]: string;
+  [s: string]: string | IStringMap;
 }
 
 export interface IMap {
