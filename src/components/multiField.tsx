@@ -3,7 +3,7 @@ import { FieldStore } from '../stores';
 import { IContext } from '../types';
 
 export interface IMultiFieldProps {
-  names?: string[];
+  names: string[];
 }
 
 export interface IMultiFieldStores {
@@ -16,7 +16,7 @@ export abstract class MultiField<Props> extends ChildField<Props & IMultiFieldPr
   constructor(props: Props & IMultiFieldProps, context: IContext) {
     super(props, context);
 
-    (this.props.names || []).forEach(name => {
+    this.props.names.forEach(name => {
       const field = new FieldStore();
       this.stores[name] = field;
       this.fields.push({ name, field });

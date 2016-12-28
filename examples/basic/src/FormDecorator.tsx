@@ -3,7 +3,7 @@ import * as Promise from 'bluebird';
 
 export interface IFormProps {
   title: string;
-  initialPasswordValue: string;
+  initialPasswordValue?: string;
 }
 
 export const FormobxForm = form<IFormProps>({

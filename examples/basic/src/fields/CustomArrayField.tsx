@@ -4,7 +4,7 @@ import { observable } from 'mobx';
 import * as React from 'react';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 
-class Field extends React.Component<{} & IWrappedMetaProps, {}> {
+class Field extends React.Component<IWrappedMetaProps, {}> {
   private id = 0;
   private arrayFields = observable<number>([]);
 
