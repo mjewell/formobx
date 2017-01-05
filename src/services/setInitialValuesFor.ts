@@ -1,7 +1,7 @@
 import { ArrayStore, ChildStore, ObjectStore } from '../stores';
 import { IMap } from '../types';
-import * as isArray from 'lodash/isArray';
-import * as isPlainObject from 'lodash/isPlainObject';
+import isArray from 'lodash/isArray';
+import isPlainObject from 'lodash/isPlainObject';
 
 function handleArrayValue(field: ArrayStore, value: any | any[] | IMap) {
   if (value && !isArray(value)) {

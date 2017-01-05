@@ -32,7 +32,7 @@
     "@types/react": "^0.14.36",
     "@types/react-css-modules": "^3.7.3",
     "@types/react-dom": "^0.14.17",
-    "awesome-typescript-loader": "^2.2.4",
+    "awesome-typescript-loader": "^3.0.0-beta.17",
     "bluebird": "^3.4.3",
     "css-loader": "^0.25.0",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -52,7 +52,7 @@
     "tslint-eslint-rules": "^1.5.0",
     "tslint-microsoft-contrib": "^2.0.12",
     "tslint-react": "^1.0.0",
-    "typescript": "^2.2.0-dev.20161127",
+    "typescript": "^2.1.4",
     "webpack": "^1.13.1",
     "webpack-dashboard": "^0.2.0",
     "webpack-dev-server": "^1.14.1"

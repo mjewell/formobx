@@ -1,6 +1,6 @@
 import { multiField } from '../../../../lib';
 import { mapErrors } from '../Error';
-import * as toUpper from 'lodash/toUpper';
+import toUpper from 'lodash/toUpper';
 import * as React from 'react';
 import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 

@@ -138,9 +138,9 @@ The form factory is special in that it returns another factory to wrap your
 component with. This is so you can pass in additional options for configuring
 the form.
 
-- `initialValues` - an object shaped like the backing from object where each
+- `initialValues` - an object shaped like the backing form object where each
 value is the starting value of the field.
-- `onSubmit` - a function which receives the form object and any other args
+- `onSubmit(event, ...otherArgs)` - a function which receives the form object and any other args
 you pass through when calling the onSubmit function passed as a prop to the
 wrapped component.
 

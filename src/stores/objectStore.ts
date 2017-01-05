@@ -3,7 +3,7 @@ import setInitialValuesFor from '../services/setInitialValuesFor';
 import { IMap, IObjectErrors } from '../types';
 import { FieldErrors } from './fieldErrors';
 import { ChildStore, ParentStore } from './types';
-import * as keys from 'lodash/keys';
+import keys from 'lodash/keys';
 import { IObservableArray, ObservableMap, action, asMap, computed, observable } from 'mobx';
 const mapValues = require('lodash/fp/mapValues');
 
