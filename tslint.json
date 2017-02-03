@@ -26,6 +26,12 @@
       "single"
     ],
     "restrict-plus-operands": false,
-    "trailing-comma": false
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "never",
+        "singleline": "never"
+      }
+    ]
   }
 }

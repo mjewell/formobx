@@ -1,6 +1,6 @@
-import { ChildField } from '../components/childField';
 import { FieldStore } from '../stores';
 import { IContext } from '../types';
+import { ChildField } from './childField';
 
 export interface IFieldProps {
   name?: string;

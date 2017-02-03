@@ -1,4 +1,4 @@
-import { IMultiFieldProps, IMultiFieldStores, MultiField } from '../components';
+import { IMultiFieldProps, IMultiFieldStores, MultiField } from '../fields';
 import { observer } from 'mobx-react';
 import { ComponentClass, StatelessComponent } from 'react';
 import * as React from 'react';

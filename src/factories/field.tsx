@@ -1,4 +1,4 @@
-import { Field, IFieldProps } from '../components';
+import { Field, IFieldProps } from '../fields';
 import { FieldStore } from '../stores';
 import { observer } from 'mobx-react';
 import { ComponentClass, StatelessComponent } from 'react';

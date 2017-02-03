@@ -1,4 +1,4 @@
-import { BaseField } from '../components/baseField';
+import { BaseField } from '../fields';
 import { ParentStore } from '../stores';
 import { observer } from 'mobx-react';
 import { ComponentClass, StatelessComponent } from 'react';
