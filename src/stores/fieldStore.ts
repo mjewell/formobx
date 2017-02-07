@@ -3,11 +3,16 @@ import { FieldErrors } from './fieldErrors';
 import { ParentStore } from './types';
 import { IObservableArray, action, computed, observable } from 'mobx';
 import * as React from 'react';
+import { delegate } from 'sirmixalot';
 
-export class FieldStore {
+class FieldStore {
   public parent: ParentStore;
+  public errors: IObservableArray<string>;
+  public clearErrors: () => void;
+  public setErrors: (errors: IFieldErrors) => void;
+
   @observable public value: any = '';
-  private fieldErrors = new FieldErrors();
+  private fieldErrors = new FieldErrors(); // tslint:disable-line
 
   @computed
   get asProps() {
@@ -29,20 +34,8 @@ export class FieldStore {
   public setValue(val: any) {
     this.value = val;
   }
-
-  // TODO: see if we can use delegation to remove these 3 methods
-  @computed
-  get errors(): IObservableArray<string> {
-    return this.fieldErrors.errors;
-  }
-
-  @action
-  public clearErrors() {
-    this.fieldErrors.clearErrors();
-  }
-
-  @action
-  public setErrors(errors: IFieldErrors) {
-    this.fieldErrors.setErrors(errors);
-  }
 }
+
+delegate(FieldStore, 'fieldErrors', ['errors', 'clearErrors', 'setErrors']);
+
+export { FieldStore };
