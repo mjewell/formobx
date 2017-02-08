@@ -1,11 +1,53 @@
-import { Field, IFieldProps } from '../fields';
+import { BaseField, ChildField, Field, IFieldNewRequiredProps, IFieldOldRequiredProps } from '../fields';
 import { FieldStore } from '../stores';
 import { observer } from 'mobx-react';
-import { ComponentClass, StatelessComponent } from 'react';
+import { Component, ComponentClass, StatelessComponent } from 'react';
 import * as React from 'react';
 
-export interface IWrappedFieldProps extends IFieldProps {
+export interface IWrappedFieldProps {
   field: FieldStore;
+}
+
+function generateClass<Props>(
+  FieldComponent: (
+    ComponentClass<Props & IWrappedFieldProps> |
+    StatelessComponent<Props & IWrappedFieldProps> |
+    string
+  )
+) {
+  if (typeof FieldComponent !== 'string') {
+    const WrappedComponent = observer(FieldComponent as ComponentClass<Props & IWrappedFieldProps>);
+
+    return class extends Component<Props & IFieldOldRequiredProps, {}> {
+      public render() {
+        const props = {
+          ...this.props as any, // TODO: remove this as any
+          field: this.props.store,
+          fields: undefined,
+          parentStore: undefined,
+          store: undefined
+        };
+
+        return <WrappedComponent {...props} />;
+      }
+    };
+  } else if (FieldComponent === 'input') {
+    return class extends Component<Props & IFieldOldRequiredProps, {}> {
+      public render() {
+        const props = {
+          ...this.props as any, // TODO: remove this as any
+          ...this.props.store.asProps,
+          fields: undefined,
+          parentStore: undefined,
+          store: undefined
+        };
+
+        return <input {...props} />;
+      }
+    };
+  } else {
+    throw new Error(`Unsupported string component type '${FieldComponent}'`);
+  }
 }
 
 export function field<Props>(
@@ -14,23 +56,7 @@ export function field<Props>(
     StatelessComponent<Props & IWrappedFieldProps> |
     string
   )
-): ComponentClass<Props & IFieldProps> {
-  let render: () => JSX.Element;
-
-  if (typeof FieldComponent !== 'string') {
-    const WrappedComponent = observer(FieldComponent as ComponentClass<Props & IWrappedFieldProps>);
-    render = function () { return <WrappedComponent {...this.props} field={this.store} />; };
-  } else if (FieldComponent === 'input') {
-    render = function () { return <input {...this.props} {...this.store.asProps} />; };
-  } else {
-    throw new Error(`Unsupported string component type '${FieldComponent}'`);
-  }
-
-  return class FormobxField extends Field<Props> {
-    private boundRender = render.bind(this);
-
-    public render() {
-      return this.boundRender();
-    }
-  };
+) {
+  const FormobxField = generateClass(FieldComponent);
+  return BaseField(ChildField(Field(FormobxField)));
 }

@@ -1,24 +1,32 @@
-import { BaseField } from '../fields';
+import { BaseField, IBaseFieldPassThroughProps } from '../fields';
 import { ParentStore } from '../stores';
 import { observer } from 'mobx-react';
-import { ComponentClass, StatelessComponent } from 'react';
+import { Component, ComponentClass, StatelessComponent } from 'react';
 import * as React from 'react';
 
-export interface IWrappedMetaProps {
+export interface IMetaProps {
   field: ParentStore;
 }
 
 export function meta<Props>(
   MetaComponent: (
-    ComponentClass<Props & IWrappedMetaProps> |
-    StatelessComponent<Props & IWrappedMetaProps>
+    ComponentClass<Props & IMetaProps> |
+    StatelessComponent<Props & IMetaProps>
   )
 ): ComponentClass<Props> {
-  const WrappedComponent = observer(MetaComponent as ComponentClass<Props & IWrappedMetaProps>);
+  const WrappedComponent = observer(MetaComponent as ComponentClass<Props & IMetaProps>);
 
-  return class FormobxMeta extends BaseField<Props> {
+  class FormobxMeta extends Component<Props & IBaseFieldPassThroughProps, {}> {
     public render() {
-      return <WrappedComponent {...this.props} field={this.context.parentStore} />;
+      const props = {
+        ...this.props as any, // TODO: remove this as any
+        field: this.props.parentStore,
+        parentStore: undefined
+      };
+
+      return <WrappedComponent {...props} />;
     }
-  };
+  }
+
+  return BaseField(FormobxMeta);
 }
