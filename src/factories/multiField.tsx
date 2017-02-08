@@ -1,9 +1,16 @@
-import { IMultiFieldProps, IMultiFieldStores, MultiField } from '../fields';
+import {
+  BaseField,
+  ChildField,
+  IMultiFieldNewRequiredProps,
+  IMultiFieldOldRequiredProps,
+  IMultiFieldStores,
+  MultiField
+} from '../fields';
 import { observer } from 'mobx-react';
-import { ComponentClass, StatelessComponent } from 'react';
+import { Component, ComponentClass, StatelessComponent } from 'react';
 import * as React from 'react';
 
-export interface IWrappedMultiFieldProps extends IMultiFieldProps {
+export interface IWrappedMultiFieldProps {
   fields: IMultiFieldStores;
 }
 
@@ -12,12 +19,20 @@ export function multiField<Props>(
     ComponentClass<Props & IWrappedMultiFieldProps> |
     StatelessComponent<Props & IWrappedMultiFieldProps>
   )
-): ComponentClass<Props & IMultiFieldProps> {
+) {
   const WrappedComponent = observer(MultiFieldComponent as ComponentClass<Props & IWrappedMultiFieldProps>);
 
-  return class FormobxMultiField extends MultiField<Props> {
+  class FormobxMultiField extends Component<Props & IMultiFieldOldRequiredProps, {}> {
     public render() {
-      return <WrappedComponent {...this.props} fields={this.stores} />;
+      const props = {
+        fields: this.props.stores,
+        parentStore: undefined,
+        store: undefined
+      };
+
+      return <WrappedComponent {...this.props} {...props} />;
     }
-  };
+  }
+
+  return BaseField(ChildField(MultiField(FormobxMultiField)));
 }

@@ -1,5 +1,4 @@
 import { FieldStore } from '../stores';
-import { IContext } from '../types';
 import { IChildFieldOldRequiredProps } from './childField';
 import { Component, ComponentClass, StatelessComponent } from 'react';
 import * as React from 'react';
@@ -21,8 +20,8 @@ export function Field<Props>(
   return class extends Component<Props & IFieldNewRequiredProps & IChildFieldOldRequiredProps, {}> {
     public store: FieldStore;
 
-    constructor(props: Props & IFieldNewRequiredProps & IChildFieldOldRequiredProps, context: IContext) {
-      super(props, context);
+    constructor(props: Props & IFieldNewRequiredProps & IChildFieldOldRequiredProps) {
+      super(props);
 
       this.store = new FieldStore();
       this.props.fields.push({
@@ -41,4 +40,3 @@ export function Field<Props>(
     }
   };
 }
-

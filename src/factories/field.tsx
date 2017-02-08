@@ -21,28 +21,26 @@ function generateClass<Props>(
     return class extends Component<Props & IFieldOldRequiredProps, {}> {
       public render() {
         const props = {
-          ...this.props as any, // TODO: remove this as any
           field: this.props.store,
           fields: undefined,
           parentStore: undefined,
           store: undefined
         };
 
-        return <WrappedComponent {...props} />;
+        return <WrappedComponent {...this.props} {...props} />;
       }
     };
   } else if (FieldComponent === 'input') {
     return class extends Component<Props & IFieldOldRequiredProps, {}> {
       public render() {
         const props = {
-          ...this.props as any, // TODO: remove this as any
           ...this.props.store.asProps,
           fields: undefined,
           parentStore: undefined,
           store: undefined
         };
 
-        return <input {...props} />;
+        return <input {...this.props} {...props} />;
       }
     };
   } else {
