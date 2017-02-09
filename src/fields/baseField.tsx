@@ -1,17 +1,16 @@
 import { ParentStore } from '../stores';
-import { IContext } from '../types';
-import { Component, ComponentClass, PropTypes, StatelessComponent } from 'react';
+import { IContext, ReactComponent } from '../types';
+import { Component, ComponentClass, PropTypes } from 'react';
 import * as React from 'react';
 
-export interface IBaseFieldOldRequiredProps {
-  parentStore: ParentStore;
+export interface IBaseFieldParamProps {
+  __formobx: {
+    parentStore: ParentStore;
+  };
 }
 
 export function BaseField<Props>(
-  WrappedComponent: (
-    ComponentClass<Props & IBaseFieldOldRequiredProps> |
-    StatelessComponent<Props & IBaseFieldOldRequiredProps>
-  )
+  WrappedComponent: ReactComponent<Props & IBaseFieldParamProps>
 ): ComponentClass<Props> {
   return class extends Component<Props, {}> {
     public static contextTypes = {
@@ -31,7 +30,7 @@ export function BaseField<Props>(
       return (
         <WrappedComponent
           {...this.props}
-          parentStore={this.context.parentStore}
+          __formobx={{ parentStore: this.context.parentStore }}
         />
       );
     }

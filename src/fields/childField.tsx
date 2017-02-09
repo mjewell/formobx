@@ -1,6 +1,7 @@
 import { ArrayStore, ChildStore } from '../stores';
-import { IBaseFieldOldRequiredProps } from './baseField';
-import { Component, ComponentClass, StatelessComponent } from 'react';
+import { ReactComponent } from '../types';
+import { IBaseFieldParamProps } from './baseField';
+import { Component, ComponentClass } from 'react';
 import * as React from 'react';
 
 export interface IFieldData {
@@ -8,21 +9,20 @@ export interface IFieldData {
   field: ChildStore;
 }
 
-export interface IChildFieldOldRequiredProps {
-  fields: IFieldData[];
+export interface IChildFieldParamProps {
+  __formobx: {
+    fields: IFieldData[];
+  };
 }
 
 export function ChildField<Props>(
-  WrappedComponent: (
-    ComponentClass<Props & IChildFieldOldRequiredProps> |
-    StatelessComponent<Props & IChildFieldOldRequiredProps>
-  )
-): ComponentClass<Props & IBaseFieldOldRequiredProps> {
-  return class extends Component<Props & IBaseFieldOldRequiredProps, {}> {
+  WrappedComponent: ReactComponent<Props & IChildFieldParamProps>
+): ComponentClass<Props & IBaseFieldParamProps> {
+  return class extends Component<Props & IBaseFieldParamProps, {}> {
     private fields: IFieldData[] = [];
 
     public componentDidMount() {
-      const parentStore = this.props.parentStore;
+      const { parentStore } = this.props.__formobx;
       if (parentStore instanceof ArrayStore) {
         this.fields.forEach(data => {
           parentStore.registerField(data.field);
@@ -41,7 +41,7 @@ export function ChildField<Props>(
     }
 
     public componentWillUnmount() {
-      const parentStore = this.props.parentStore;
+      const { parentStore } = this.props.__formobx;
       if (parentStore instanceof ArrayStore) {
         this.fields.forEach(data => {
           parentStore.unregisterField(data.field);
@@ -59,13 +59,17 @@ export function ChildField<Props>(
     }
 
     public render() {
+      const formobxProps = {
+        ...this.props.__formobx,
+        fields: this.fields
+      };
+
       return (
         <WrappedComponent
           {...this.props}
-          fields={this.fields}
+          __formobx={formobxProps}
         />
       );
     }
   };
 }
-

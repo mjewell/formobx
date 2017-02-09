@@ -1,7 +1,8 @@
-import { BaseField, ChildField, Field, IFieldNewRequiredProps, IFieldOldRequiredProps } from '../fields';
+import { BaseField, ChildField, Field, IFieldParamProps, IFieldResultProps } from '../fields';
 import { FieldStore } from '../stores';
+import { ReactComponent } from '../types';
 import { observer } from 'mobx-react';
-import { Component, ComponentClass, StatelessComponent } from 'react';
+import { Component, ComponentClass } from 'react';
 import * as React from 'react';
 
 export interface IWrappedFieldProps {
@@ -9,38 +10,34 @@ export interface IWrappedFieldProps {
 }
 
 function generateClass<Props>(
-  FieldComponent: (
-    ComponentClass<Props & IWrappedFieldProps> |
-    StatelessComponent<Props & IWrappedFieldProps> |
-    string
-  )
+  FieldComponent: ReactComponent<Props & IFieldResultProps & IWrappedFieldProps> | string
 ) {
   if (typeof FieldComponent !== 'string') {
-    const WrappedComponent = observer(FieldComponent as ComponentClass<Props & IWrappedFieldProps>);
+    const WrappedComponent = observer(FieldComponent as ComponentClass<Props & IFieldResultProps & IWrappedFieldProps>);
 
-    return class extends Component<Props & IFieldOldRequiredProps, {}> {
+    return class extends Component<Props & IFieldParamProps, {}> {
       public render() {
+        const { __formobx } = this.props;
         const props = {
-          field: this.props.store,
-          fields: undefined,
-          parentStore: undefined,
-          store: undefined
+          field: __formobx.store,
+          ...this.props as any,
+          __formobx: undefined
         };
 
-        return <WrappedComponent {...this.props} {...props} />;
+        return <WrappedComponent {...props} />;
       }
     };
   } else if (FieldComponent === 'input') {
-    return class extends Component<Props & IFieldOldRequiredProps, {}> {
+    return class extends Component<Props & IFieldParamProps, {}> {
       public render() {
+        const { __formobx } = this.props;
         const props = {
-          ...this.props.store.asProps,
-          fields: undefined,
-          parentStore: undefined,
-          store: undefined
+          ...__formobx.store.asProps,
+          ...this.props as any,
+          __formobx: undefined
         };
 
-        return <input {...this.props} {...props} />;
+        return <input {...props} />;
       }
     };
   } else {
@@ -49,11 +46,7 @@ function generateClass<Props>(
 }
 
 export function field<Props>(
-  FieldComponent: (
-    ComponentClass<Props & IWrappedFieldProps> |
-    StatelessComponent<Props & IWrappedFieldProps> |
-    string
-  )
+  FieldComponent: ReactComponent<Props & IFieldResultProps & IWrappedFieldProps> | string
 ) {
   const FormobxField = generateClass(FieldComponent);
   return BaseField(ChildField(Field(FormobxField)));

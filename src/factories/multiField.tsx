@@ -1,13 +1,14 @@
 import {
   BaseField,
   ChildField,
-  IMultiFieldNewRequiredProps,
-  IMultiFieldOldRequiredProps,
+  IMultiFieldParamProps,
+  IMultiFieldResultProps,
   IMultiFieldStores,
   MultiField
 } from '../fields';
+import { ReactComponent } from '../types';
 import { observer } from 'mobx-react';
-import { Component, ComponentClass, StatelessComponent } from 'react';
+import { Component, ComponentClass } from 'react';
 import * as React from 'react';
 
 export interface IWrappedMultiFieldProps {
@@ -15,22 +16,22 @@ export interface IWrappedMultiFieldProps {
 }
 
 export function multiField<Props>(
-  MultiFieldComponent: (
-    ComponentClass<Props & IWrappedMultiFieldProps> |
-    StatelessComponent<Props & IWrappedMultiFieldProps>
-  )
+  MultiFieldComponent: ReactComponent<Props & IMultiFieldResultProps & IWrappedMultiFieldProps>
 ) {
-  const WrappedComponent = observer(MultiFieldComponent as ComponentClass<Props & IWrappedMultiFieldProps>);
+  const WrappedComponent = observer(
+    MultiFieldComponent as ComponentClass<Props & IMultiFieldResultProps & IWrappedMultiFieldProps>
+  );
 
-  class FormobxMultiField extends Component<Props & IMultiFieldOldRequiredProps, {}> {
+  class FormobxMultiField extends Component<Props & IMultiFieldParamProps, {}> {
     public render() {
+      const { __formobx } = this.props;
       const props = {
-        fields: this.props.stores,
-        parentStore: undefined,
-        store: undefined
+        fields: __formobx.stores,
+        ...this.props as any,
+        __formobx: undefined
       };
 
-      return <WrappedComponent {...this.props} {...props} />;
+      return <WrappedComponent {...props} />;
     }
   }
 

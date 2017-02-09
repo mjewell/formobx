@@ -1,44 +1,50 @@
 import { FieldStore } from '../stores';
-import { IChildFieldOldRequiredProps } from './childField';
-import { Component, ComponentClass, StatelessComponent } from 'react';
+import { ReactComponent } from '../types';
+import { IChildFieldParamProps } from './childField';
+import { Component, ComponentClass } from 'react';
 import * as React from 'react';
 
 export interface IMultiFieldStores {
   [name: string]: FieldStore;
 }
 
-export interface IMultiFieldNewRequiredProps {
+export interface IMultiFieldResultProps {
   names: string[];
 }
 
-export interface IMultiFieldOldRequiredProps {
-  stores: IMultiFieldStores;
+export interface IMultiFieldParamProps {
+  __formobx: {
+    stores: IMultiFieldStores;
+  };
 }
 
 export function MultiField<Props>(
-  WrappedComponent: (
-    ComponentClass<Props & IMultiFieldOldRequiredProps> |
-    StatelessComponent<Props & IMultiFieldOldRequiredProps>
-  )
-): ComponentClass<Props & IMultiFieldNewRequiredProps & IChildFieldOldRequiredProps> {
-  return class extends Component<Props & IMultiFieldNewRequiredProps & IChildFieldOldRequiredProps, {}> {
-    protected stores: IMultiFieldStores = {};
+  WrappedComponent: ReactComponent<Props & IMultiFieldParamProps>
+): ComponentClass<Props & IChildFieldParamProps & IMultiFieldResultProps> {
+  return class extends Component<Props & IChildFieldParamProps & IMultiFieldResultProps, {}> {
+    private stores: IMultiFieldStores = {};
 
-    constructor(props: Props & IMultiFieldNewRequiredProps & IChildFieldOldRequiredProps) {
+    constructor(props: Props & IChildFieldParamProps & IMultiFieldResultProps) {
       super(props);
 
       this.props.names.forEach(name => {
         const field = new FieldStore();
         this.stores[name] = field;
-        this.props.fields.push({ name, field });
+        const { fields } = this.props.__formobx;
+        fields.push({ name, field });
       });
     }
 
     public render() {
+      const formobxProps = {
+        ...this.props.__formobx,
+        stores: this.stores
+      };
+
       return (
         <WrappedComponent
           {...this.props}
-          stores={this.stores}
+          __formobx={formobxProps}
         />
       );
     }
