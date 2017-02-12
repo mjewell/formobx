@@ -1,6 +1,6 @@
-import { IFormFieldParamProps, IFormOptions, IWrappedOnSubmit, ParentField, createFormField } from '../fields';
 import { FormStore } from '../stores';
 import { ReactComponent } from '../types';
+import { IFormOptions, IWithFormPropsParamProps, IWrappedOnSubmit, createWithFormProps, withParentStoreInContext } from '../wrappers';
 import { observer } from 'mobx-react';
 import { Component, ComponentClass } from 'react';
 import * as React from 'react';
@@ -14,9 +14,9 @@ export function form<Props>(options: IFormOptions<Props>) {
   type EnhancedProps = Props & IWrappedFormProps;
 
   return (FormComponent: ReactComponent<EnhancedProps>) => {
-    const WrappedComponent = observer(FormComponent as ComponentClass<Props & IWrappedFormProps>);
+    const WrappedComponent = observer(FormComponent as ComponentClass<EnhancedProps>);
 
-    class FormobxForm extends Component<Props & IFormFieldParamProps, {}> {
+    class FormobxForm extends Component<Props & IWithFormPropsParamProps, {}> {
       public render() {
         const { __formobx } = this.props;
         const props = {
@@ -30,6 +30,6 @@ export function form<Props>(options: IFormOptions<Props>) {
       }
     }
 
-    return createFormField(options)(ParentField(FormobxForm));
+    return createWithFormProps(options)(withParentStoreInContext<Props & IWithFormPropsParamProps, FormStore>(FormobxForm));
   };
 }

@@ -1,6 +1,6 @@
-import { BaseField, ChildField, Field, IFieldParamProps, IFieldResultProps } from '../fields';
 import { FieldStore } from '../stores';
 import { ReactComponent } from '../types';
+import { IWithStoreParamProps, createWithStore, withFieldsRegistered, withParentStore } from '../wrappers';
 import { observer } from 'mobx-react';
 import { Component, ComponentClass } from 'react';
 import * as React from 'react';
@@ -10,12 +10,12 @@ export interface IWrappedFieldProps {
 }
 
 function generateClass<Props>(
-  FieldComponent: ReactComponent<Props & IFieldResultProps & IWrappedFieldProps> | string
+  FieldComponent: ReactComponent<Props & IWrappedFieldProps> | string
 ) {
   if (typeof FieldComponent !== 'string') {
-    const WrappedComponent = observer(FieldComponent as ComponentClass<Props & IFieldResultProps & IWrappedFieldProps>);
+    const WrappedComponent = observer(FieldComponent as ComponentClass<Props & IWrappedFieldProps>);
 
-    return class extends Component<Props & IFieldParamProps, {}> {
+    return class extends Component<Props & IWithStoreParamProps<FieldStore>, {}> {
       public render() {
         const { __formobx } = this.props;
         const props = {
@@ -28,7 +28,7 @@ function generateClass<Props>(
       }
     };
   } else if (FieldComponent === 'input') {
-    return class extends Component<Props & IFieldParamProps, {}> {
+    return class extends Component<Props & IWithStoreParamProps<FieldStore>, {}> {
       public render() {
         const { __formobx } = this.props;
         const props = {
@@ -46,8 +46,8 @@ function generateClass<Props>(
 }
 
 export function field<Props>(
-  FieldComponent: ReactComponent<Props & IFieldResultProps & IWrappedFieldProps> | string
+  FieldComponent: ReactComponent<Props & IWrappedFieldProps> | string
 ) {
   const FormobxField = generateClass(FieldComponent);
-  return BaseField(ChildField(Field(FormobxField)));
+  return withParentStore(withFieldsRegistered(createWithStore(FieldStore)(FormobxField)));
 }

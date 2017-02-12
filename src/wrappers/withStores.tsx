@@ -1,30 +1,31 @@
+import { IWithFieldsRegisteredParamProps } from '.';
 import { FieldStore } from '../stores';
 import { ReactComponent } from '../types';
-import { IChildFieldParamProps } from './childField';
 import { Component, ComponentClass } from 'react';
 import * as React from 'react';
 
-export interface IMultiFieldStores {
+export interface IStoresMap {
   [name: string]: FieldStore;
 }
 
-export interface IMultiFieldResultProps {
-  names: string[];
-}
-
-export interface IMultiFieldParamProps {
+export type IWithStoresParamProps = {
   __formobx: {
-    stores: IMultiFieldStores;
+    stores: IStoresMap;
   };
-}
+};
 
-export function MultiField<Props>(
-  WrappedComponent: ReactComponent<Props & IMultiFieldParamProps>
-): ComponentClass<Props & IChildFieldParamProps & IMultiFieldResultProps> {
-  return class extends Component<Props & IChildFieldParamProps & IMultiFieldResultProps, {}> {
-    private stores: IMultiFieldStores = {};
+export type IWithStoresResultProps = {
+  names: string[];
+} & IWithFieldsRegisteredParamProps;
 
-    constructor(props: Props & IChildFieldParamProps & IMultiFieldResultProps) {
+// TODO: merge this with createWithStores
+export function withStores<Props>(
+  WrappedComponent: ReactComponent<Props & IWithStoresParamProps>
+): ComponentClass<Props & IWithStoresResultProps> {
+  return class extends Component<Props & IWithStoresResultProps, {}> {
+    private stores: IStoresMap = {};
+
+    constructor(props: Props & IWithStoresResultProps) {
       super(props);
 
       this.props.names.forEach(name => {

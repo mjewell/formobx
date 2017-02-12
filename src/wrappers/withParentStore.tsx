@@ -3,14 +3,14 @@ import { IContext, ReactComponent } from '../types';
 import { Component, ComponentClass, PropTypes } from 'react';
 import * as React from 'react';
 
-export interface IBaseFieldParamProps {
+export type IWithParentStoreParamProps = {
   __formobx: {
     parentStore: ParentStore;
   };
 }
 
-export function BaseField<Props>(
-  WrappedComponent: ReactComponent<Props & IBaseFieldParamProps>
+export function withParentStore<Props>(
+  WrappedComponent: ReactComponent<Props & IWithParentStoreParamProps>
 ): ComponentClass<Props> {
   return class extends Component<Props, {}> {
     public static contextTypes = {

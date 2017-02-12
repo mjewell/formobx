@@ -1,6 +1,6 @@
-import { FormStore } from '../stores';
-import { IMap, IStringMap, ReactComponent } from '../types';
-import { observer } from 'mobx-react';
+import { IWithStoreParamProps } from '.';
+import { FormStore } from '../../stores';
+import { IMap, IStringMap, ReactComponent } from '../../types';
 import { Component, ComponentClass, FormEvent } from 'react';
 import * as React from 'react';
 
@@ -18,12 +18,11 @@ export interface IFormOptions<Props> {
   onSubmit: IOnSubmit;
 };
 
-export interface IFormFieldParamProps {
+export type IWithFormPropsParamProps = {
   __formobx: {
-    store: FormStore;
     onSubmit: IWrappedOnSubmit;
   };
-}
+} & IWithStoreParamProps<FormStore>;
 
 function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
   return (e: FormEvent<any>, ...otherArgs: any[]) => {
@@ -36,10 +35,10 @@ function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
   };
 }
 
-export function createFormField<Props>(options: IFormOptions<Props>) {
-  type EnhancedProps = Props & IFormFieldParamProps;
-
-  return (WrappedComponent: ReactComponent<EnhancedProps>): ComponentClass<Props> => {
+export function createWithFormProps<Props>(options: IFormOptions<Props>) {
+  return function withFormProps(
+    WrappedComponent: ReactComponent<Props & IWithFormPropsParamProps>
+  ): ComponentClass<Props> {
     class FormobxForm extends Component<Props, {}> {
       private store: FormStore;
       private onSubmit: IWrappedOnSubmit;

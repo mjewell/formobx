@@ -1,28 +1,21 @@
-import {
-  BaseField,
-  ChildField,
-  IMultiFieldParamProps,
-  IMultiFieldResultProps,
-  IMultiFieldStores,
-  MultiField
-} from '../fields';
 import { ReactComponent } from '../types';
+import { IStoresMap, IWithStoresResultProps, IWithStoresParamProps, withFieldsRegistered, withParentStore, withStores } from '../wrappers';
 import { observer } from 'mobx-react';
 import { Component, ComponentClass } from 'react';
 import * as React from 'react';
 
 export interface IWrappedMultiFieldProps {
-  fields: IMultiFieldStores;
+  fields: IStoresMap;
 }
 
 export function multiField<Props>(
-  MultiFieldComponent: ReactComponent<Props & IMultiFieldResultProps & IWrappedMultiFieldProps>
+  MultiFieldComponent: ReactComponent<Props & IWithStoresResultProps & IWrappedMultiFieldProps>
 ) {
   const WrappedComponent = observer(
-    MultiFieldComponent as ComponentClass<Props & IMultiFieldResultProps & IWrappedMultiFieldProps>
+    MultiFieldComponent as ComponentClass<Props & IWithStoresResultProps & IWrappedMultiFieldProps>
   );
 
-  class FormobxMultiField extends Component<Props & IMultiFieldParamProps, {}> {
+  class FormobxMultiField extends Component<Props & IWithStoresParamProps, {}> {
     public render() {
       const { __formobx } = this.props;
       const props = {
@@ -35,5 +28,5 @@ export function multiField<Props>(
     }
   }
 
-  return BaseField(ChildField(MultiField(FormobxMultiField)));
+  return withParentStore(withFieldsRegistered(withStores(FormobxMultiField)));
 }
