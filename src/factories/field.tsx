@@ -34,9 +34,9 @@ function generateClass<Props>(
         const { __formobx } = this.props;
         const props = {
           ...__formobx.store.asProps,
-          ...this.props as any,
-          __formobx: undefined
+          ...this.props as any
         };
+        delete props.__formobx;
 
         return <input {...props} />;
       }
