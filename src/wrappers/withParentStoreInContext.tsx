@@ -1,13 +1,18 @@
 import { ParentStore } from '../stores';
 import { ReactComponent } from '../types';
-import { IWithStoreParamProps } from './creators/createWithStore';
 import { Component, ComponentClass, PropTypes } from 'react';
 import * as React from 'react';
 
+export type IWithParentStoreInContextResultProps<Store extends ParentStore> = {
+  __formobx: {
+    store: Store
+  };
+};
+
 export function withParentStoreInContext<Props, Store extends ParentStore>(
   WrappedComponent: ReactComponent<Props>
-): ComponentClass<Props & IWithStoreParamProps<Store>> {
-  return class extends Component<Props & IWithStoreParamProps<Store>, {}> {
+): ComponentClass<Props & IWithParentStoreInContextResultProps<Store>> {
+  return class extends Component<Props & IWithParentStoreInContextResultProps<Store>, {}> {
     public static childContextTypes = {
       parentStore: PropTypes.object
     };

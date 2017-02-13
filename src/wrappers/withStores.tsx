@@ -1,4 +1,4 @@
-import { IWithFieldsRegisteredParamProps } from '.';
+import { IFieldData } from '.';
 import { FieldStore } from '../stores';
 import { ReactComponent } from '../types';
 import { Component, ComponentClass } from 'react';
@@ -14,9 +14,16 @@ export type IWithStoresParamProps = {
   };
 };
 
+// this nested type has to be separated out for typescript to merge props correctly
+export type IWithStoresResultFormobxProps = {
+  __formobx: {
+    fields: IFieldData[];
+  };
+};
+
 export type IWithStoresResultProps = {
-  names: string[];
-} & IWithFieldsRegisteredParamProps;
+  names?: string[];
+} & IWithStoresResultFormobxProps;
 
 // TODO: merge this with createWithStores
 export function withStores<Props>(
@@ -28,7 +35,7 @@ export function withStores<Props>(
     constructor(props: Props & IWithStoresResultProps) {
       super(props);
 
-      this.props.names.forEach(name => {
+      (this.props.names || []).forEach(name => {
         const field = new FieldStore();
         this.stores[name] = field;
         const { fields } = this.props.__formobx;

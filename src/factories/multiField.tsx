@@ -6,6 +6,7 @@ import * as React from 'react';
 
 export interface IWrappedMultiFieldProps {
   fields: IStoresMap;
+  names: string[];
 }
 
 export function multiField<Props>(

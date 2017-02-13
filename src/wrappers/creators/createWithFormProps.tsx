@@ -1,4 +1,3 @@
-import { IWithStoreParamProps } from '.';
 import { FormStore } from '../../stores';
 import { IMap, IStringMap, ReactComponent } from '../../types';
 import { Component, ComponentClass, FormEvent } from 'react';
@@ -21,8 +20,9 @@ export interface IFormOptions<Props> {
 export type IWithFormPropsParamProps = {
   __formobx: {
     onSubmit: IWrappedOnSubmit;
+    store: FormStore;
   };
-} & IWithStoreParamProps<FormStore>;
+};
 
 function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
   return (e: FormEvent<any>, ...otherArgs: any[]) => {
@@ -39,7 +39,7 @@ export function createWithFormProps<Props>(options: IFormOptions<Props>) {
   return function withFormProps(
     WrappedComponent: ReactComponent<Props & IWithFormPropsParamProps>
   ): ComponentClass<Props> {
-    class FormobxForm extends Component<Props, {}> {
+    return class extends Component<Props, {}> {
       private store: FormStore;
       private onSubmit: IWrappedOnSubmit;
 
@@ -72,8 +72,6 @@ export function createWithFormProps<Props>(options: IFormOptions<Props>) {
           />
         );
       }
-    }
-
-    return FormobxForm;
+    };
   };
 }

@@ -1,18 +1,25 @@
-import { IFieldData, IWithFieldsRegisteredParamProps, IWithParentStoreParamProps } from '..';
+import { IFieldData } from '..';
 import { ChildStore } from '../../stores';
 import { ReactComponent } from '../../types';
 import { Component, ComponentClass } from 'react';
 import * as React from 'react';
 
-export type IWithStoreParamProps<Store> = {
+export type IWithStoreParamProps<Store extends ChildStore> = {
   __formobx: {
     store: Store;
   };
 };
 
+// this nested type has to be separated out for typescript to merge props correctly
+export type IWithStoreResultFormobxProps = {
+  __formobx: {
+    fields: IFieldData[];
+  };
+}
+
 export type IWithStoreResultProps = {
-  name: string;
-} & IWithFieldsRegisteredParamProps;
+  name?: string;
+} & IWithStoreResultFormobxProps;
 
 export function createWithStore<Store extends ChildStore>(StoreClass: new () => Store) {
   return function withStore<Props>(

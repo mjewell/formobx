@@ -1,13 +1,8 @@
-import { IWithParentStoreParamProps } from '.';
-import { ArrayStore, ChildStore } from '../stores';
+import { IFieldData } from '.';
+import { ArrayStore, ParentStore } from '../stores';
 import { ReactComponent } from '../types';
 import { Component, ComponentClass } from 'react';
 import * as React from 'react';
-
-export interface IFieldData {
-  name?: string;
-  field: ChildStore;
-};
 
 export type IWithFieldsRegisteredParamProps = {
   __formobx: {
@@ -15,10 +10,16 @@ export type IWithFieldsRegisteredParamProps = {
   };
 };
 
+export type IWithFieldsRegisteredResultProps = {
+  __formobx: {
+    parentStore: ParentStore;
+  };
+};
+
 export function withFieldsRegistered<Props>(
   WrappedComponent: ReactComponent<Props & IWithFieldsRegisteredParamProps>
-): ComponentClass<Props & IWithParentStoreParamProps> {
-  return class extends Component<Props & IWithParentStoreParamProps, {}> {
+): ComponentClass<Props & IWithFieldsRegisteredResultProps> {
+  return class extends Component<Props & IWithFieldsRegisteredResultProps, {}> {
     private fields: IFieldData[] = [];
 
     public componentDidMount() {

@@ -1,22 +1,30 @@
 import { FormStore } from '../stores';
 import { ReactComponent } from '../types';
-import { IFormOptions, IWithFormPropsParamProps, IWrappedOnSubmit, createWithFormProps, withParentStoreInContext } from '../wrappers';
+import { IFormOptions, IWrappedOnSubmit, createWithFormProps, withParentStoreInContext } from '../wrappers';
 import { observer } from 'mobx-react';
 import { Component, ComponentClass } from 'react';
 import * as React from 'react';
 
-export interface IWrappedFormProps {
+export type IFormParamProps = {
   form: FormStore;
   onSubmit: IWrappedOnSubmit;
 }
 
-export function form<Props>(options: IFormOptions<Props>) {
-  type EnhancedProps = Props & IWrappedFormProps;
+export type IFormResultProps = {
+  __formobx: {
+    onSubmit: IWrappedOnSubmit;
+    store: FormStore;
+  };
+};
 
-  return (FormComponent: ReactComponent<EnhancedProps>) => {
+
+export function form<Props>(options: IFormOptions<Props>) {
+  type EnhancedProps = Props & IFormParamProps;
+
+  return function FormobxForm(FormComponent: ReactComponent<EnhancedProps>) {
     const WrappedComponent = observer(FormComponent as ComponentClass<EnhancedProps>);
 
-    class FormobxForm extends Component<Props & IWithFormPropsParamProps, {}> {
+    class FormobxForm extends Component<Props & IFormResultProps, {}> {
       public render() {
         const { __formobx } = this.props;
         const props = {
@@ -30,6 +38,6 @@ export function form<Props>(options: IFormOptions<Props>) {
       }
     }
 
-    return createWithFormProps(options)(withParentStoreInContext<Props & IWithFormPropsParamProps, FormStore>(FormobxForm));
+    return createWithFormProps(options)(withParentStoreInContext<Props & IFormResultProps, FormStore>(FormobxForm));
   };
 }

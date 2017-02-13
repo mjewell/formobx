@@ -1,12 +1,13 @@
 import { FieldStore } from '../stores';
 import { ReactComponent } from '../types';
-import { IWithStoreParamProps, createWithStore, withFieldsRegistered, withParentStore } from '../wrappers';
+import { IFieldData, IWithStoreParamProps, createWithStore, withFieldsRegistered, withParentStore } from '../wrappers';
 import { observer } from 'mobx-react';
 import { Component, ComponentClass } from 'react';
 import * as React from 'react';
 
 export interface IWrappedFieldProps {
   field: FieldStore;
+  name?: string;
 }
 
 function generateClass<Props>(
