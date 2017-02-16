@@ -3,8 +3,8 @@ import setInitialValuesFor from '../services/setInitialValuesFor';
 import { IMap, IObjectErrors } from '../types';
 import { FieldErrors } from './fieldErrors';
 import { ChildStore, ParentStore } from './types';
-import keys from 'lodash/keys';
 import { IObservableArray, ObservableMap, action, asMap, computed, observable } from 'mobx';
+const keys = require('lodash/keys');
 const mapValues = require('lodash/fp/mapValues');
 
 const mapValuesToJS = mapValues((f: ChildStore) => f.value);
@@ -62,6 +62,6 @@ export class ObjectStore {
   @action
   public setErrors(errors: IObjectErrors) {
     this.fieldErrors.setErrors(errors._base);
-    keys(errors).forEach(key => setErrorsFor(this.fields.get(key), errors[key]));
+    keys(errors).forEach((key: string) => setErrorsFor(this.fields.get(key), errors[key]));
   }
 }

@@ -1,7 +1,8 @@
-import { BaseField } from '../components/baseField';
 import { ParentStore } from '../stores';
+import { ReactComponent } from '../types';
+import { IWithParentStoreParamProps, withParentStore } from '../wrappers';
 import { observer } from 'mobx-react';
-import { ComponentClass, StatelessComponent } from 'react';
+import { Component, ComponentClass } from 'react';
 import * as React from 'react';
 
 export interface IWrappedMetaProps {
@@ -9,16 +10,23 @@ export interface IWrappedMetaProps {
 }
 
 export function meta<Props>(
-  MetaComponent: (
-    ComponentClass<Props & IWrappedMetaProps> |
-    StatelessComponent<Props & IWrappedMetaProps>
-  )
+  MetaComponent: ReactComponent<Props & IWrappedMetaProps>
 ): ComponentClass<Props> {
   const WrappedComponent = observer(MetaComponent as ComponentClass<Props & IWrappedMetaProps>);
 
-  return class FormobxMeta extends BaseField<Props> {
+  class FormobxMeta extends Component<Props & IWithParentStoreParamProps, {}> {
     public render() {
-      return <WrappedComponent {...this.props} field={this.context.parentStore} />;
+      // TODO: when can we replace this with { __formobx, ...props } = this.props
+      const { __formobx } = this.props;
+      const props = {
+        field: __formobx.parentStore,
+        ...this.props as any,
+        __formobx: undefined
+      };
+
+      return <WrappedComponent {...props} />;
     }
-  };
+  }
+
+  return withParentStore(FormobxMeta);
 }

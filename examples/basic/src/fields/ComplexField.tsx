@@ -1,8 +1,8 @@
 import { multiField } from '../../../../lib';
 import { mapErrors } from '../Error';
-import toUpper from 'lodash/toUpper';
 import * as React from 'react';
 import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+const toUpper = require('lodash/toUpper');
 
 export interface IComplexFieldProps {
   type: string;
@@ -15,8 +15,8 @@ export const ComplexField = multiField<IComplexFieldProps>(
       <FormControl
         type={type}
         value={original.value}
-        onChange={(e: any) => { original.setValue(e.target.value); upcased.setValue(toUpper(e.target.value)); } }
-        />
+        onChange={(e: any) => { original.setValue(e.target.value); upcased.setValue(toUpper(e.target.value)); }}
+      />
       {mapErrors(original.errors)}
       {mapErrors(upcased.errors)}
     </FormGroup>
