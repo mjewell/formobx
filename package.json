@@ -1,6 +1,6 @@
 {
   "name": "formobx",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "A library for removing a lot of boilerplate from forms with Mobx.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
