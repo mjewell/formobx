@@ -17,12 +17,12 @@ export function meta<Props>(
   class FormobxMeta extends Component<Props & IWithParentStoreParamProps, {}> {
     public render() {
       // TODO: when can we replace this with { __formobx, ...props } = this.props
-      const { __formobx } = this.props;
+      const { __formobx } = this.props; // tslint:disable-line:variable-name
       const props = {
         field: __formobx.parentStore,
-        ...this.props as any,
-        __formobx: undefined
+        ...this.props as any
       };
+      delete props.__formobx;
 
       return <WrappedComponent {...props} />;
     }

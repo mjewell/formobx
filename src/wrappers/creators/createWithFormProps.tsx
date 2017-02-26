@@ -36,6 +36,7 @@ function wrapOnSubmit(store: FormStore, callback: IOnSubmit) {
 }
 
 export function createWithFormProps<Props>(options: IFormOptions<Props>) {
+  // tslint:disable-next-line:only-arrow-functions
   return function withFormProps(
     WrappedComponent: ReactComponent<Props & IWithFormPropsParamProps>
   ): ComponentClass<Props> {

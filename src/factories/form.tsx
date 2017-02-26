@@ -17,22 +17,23 @@ export type IFormResultProps = {
   };
 };
 
-
 export function form<Props>(options: IFormOptions<Props>) {
   type EnhancedProps = Props & IFormParamProps;
 
+  // tslint:disable-next-line:only-arrow-functions
   return function FormobxForm(FormComponent: ReactComponent<EnhancedProps>) {
     const WrappedComponent = observer(FormComponent as ComponentClass<EnhancedProps>);
 
     class FormobxForm extends Component<Props & IFormResultProps, {}> {
       public render() {
-        const { __formobx } = this.props;
+        const { __formobx } = this.props; // tslint:disable-line:variable-name
         const props = {
           form: __formobx.store,
           onSubmit: __formobx.onSubmit,
-          ...this.props as any,
-          __formobx: undefined
+          ...this.props as any
         };
+
+        delete props.__formobx;
 
         return <WrappedComponent {...props} />;
       }

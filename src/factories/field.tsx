@@ -1,6 +1,6 @@
 import { FieldStore } from '../stores';
 import { ReactComponent } from '../types';
-import { IFieldData, IWithStoreParamProps, createWithStore, withFieldsRegistered, withParentStore } from '../wrappers';
+import { IWithStoreParamProps, createWithStore, withFieldsRegistered, withParentStore } from '../wrappers';
 import { observer } from 'mobx-react';
 import { Component, ComponentClass } from 'react';
 import * as React from 'react';
@@ -18,12 +18,12 @@ function generateClass<Props>(
 
     return class extends Component<Props & IWithStoreParamProps<FieldStore>, {}> {
       public render() {
-        const { __formobx } = this.props;
+        const { __formobx } = this.props; // tslint:disable-line:variable-name
         const props = {
           field: __formobx.store,
-          ...this.props as any,
-          __formobx: undefined
+          ...this.props as any
         };
+        delete props.__formobx;
 
         return <WrappedComponent {...props} />;
       }
@@ -31,7 +31,7 @@ function generateClass<Props>(
   } else if (FieldComponent === 'input') {
     return class extends Component<Props & IWithStoreParamProps<FieldStore>, {}> {
       public render() {
-        const { __formobx } = this.props;
+        const { __formobx } = this.props; // tslint:disable-line:variable-name
         const props = {
           ...__formobx.store.asProps,
           ...this.props as any

@@ -20,7 +20,8 @@ export class ArrayStore {
   @action
   public registerField(field: ChildStore) {
     this.fields.push(field);
-    // TODO: should these be cleared as you go? if you add one, delete it, and add another, should that have the value set?
+    // TODO: should these be cleared as you go? if you add one, delete it,
+    // and add another, should that have the value set?
     // TODO: should you be able to say for all, instead of by index
     setInitialValuesFor(field, this.initialValues[this.fields.length - 1]);
     field.parent = this;

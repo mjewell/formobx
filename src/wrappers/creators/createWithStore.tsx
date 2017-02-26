@@ -22,6 +22,7 @@ export type IWithStoreResultProps = {
 } & IWithStoreResultFormobxProps;
 
 export function createWithStore<Store extends ChildStore>(StoreClass: new () => Store) {
+  // tslint:disable-next-line:only-arrow-functions
   return function withStore<Props>(
     WrappedComponent: ReactComponent<Props & IWithStoreParamProps<Store>>
   ): ComponentClass<Props & IWithStoreResultProps> {

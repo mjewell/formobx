@@ -1,5 +1,10 @@
 import { ArrayStore, ObjectStore } from '../stores';
-import { IFieldData, createWithStore, withFieldsRegistered, withParentStore, withParentStoreInContext } from '../wrappers';
+import {
+  createWithStore,
+  withFieldsRegistered,
+  withParentStore,
+  withParentStoreInContext
+} from '../wrappers';
 import * as React from 'react';
 
 export class ChildrenRenderer<Props> extends React.Component<Props, {}> {
